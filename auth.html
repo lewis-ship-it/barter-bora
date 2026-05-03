@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+<meta name="supabase-url" content="<?php echo getenv('SUPABASE_URL'); ?>">
+<meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+<meta name="cloudinary-cloud-name" content="<?php echo getenv('CLOUDINARY_CLOUD_NAME'); ?>">
+<meta name="cloudinary-upload-preset" content="<?php echo getenv('CLOUDINARY_UPLOAD_PRESET'); ?>">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+    <title>Join Barter Bora</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Modular CSS -->
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <header class="auth-header">
+            <h1 class="brand-title">BARTER BORA</h1>
+            <p class="brand-subtitle">Better Trading. Zero Cash.</p>
+        </header>
+
+        <main class="auth-card">
+            <!-- Success Message -->
+            <div id="success-message" class="message success-message hidden">
+                <span class="message-icon">✓</span>
+                <span class="message-text"></span>
+            </div>
+            
+            <!-- Error Message -->
+            <div id="error-message" class="message error-message hidden">
+                <span class="message-icon">⚠</span>
+                <span class="message-text"></span>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="login-form" class="form-container">
+                <h2 class="form-title">Welcome Back</h2>
+                <div class="form-group">
+                    <input type="email" id="login-email" placeholder="Email Address" class="form-input">
+                    <input type="password" id="login-password" placeholder="Password" class="form-input">
+                    <button onclick="handleLogin()" class="auth-button">LOG IN</button>
+                </div>
+                <div class="form-footer">
+                    <p onclick="showForm('signup')" class="auth-link">Don't have an account? <span>Sign Up</span></p>
+                    <p onclick="showForm('forgot')" class="auth-link text-sm">Forgot Password?</p>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="form-container hidden">
+                <h2 class="form-title">Create Account</h2>
+                <div class="form-group">
+                    <div class="name-group">
+                        <input type="text" id="reg-fname" placeholder="First Name" class="form-input">
+                        <input type="text" id="reg-lname" placeholder="Last Name" class="form-input">
+                    </div>
+                    <input type="text" id="reg-username" placeholder="Unique Username" class="form-input">
+                    <input type="email" id="reg-email" placeholder="Email Address" class="form-input">
+                    <input type="tel" id="reg-phone" placeholder="Phone Number" class="form-input">
+                    <input type="text" id="reg-location" placeholder="Location" class="form-input">
+                    <input type="password" id="reg-password" placeholder="Create Password" class="form-input">
+                    <input type="password" id="reg-confirm-password" placeholder="Confirm Password" class="form-input">
+                    <div id="password-requirements" class="requirements">
+                        <p class="requirement-title">Password must include:</p>
+                        <p id="req-length" class="requirement"><span class="req-icon">◯</span> At least 8 characters</p>
+                        <p id="req-uppercase" class="requirement"><span class="req-icon">◯</span> One uppercase letter</p>
+                        <p id="req-number" class="requirement"><span class="req-icon">◯</span> One number</p>
+                    </div>
+                    <button onclick="handleSignup()" class="auth-button">CREATE ACCOUNT</button>
+                </div>
+                <div class="form-footer">
+                    <p onclick="showForm('login')" class="auth-link">Already have an account? <span>Log In</span></p>
+                </div>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div id="forgot-form" class="form-container hidden">
+                <h2 class="form-title">Reset Password</h2>
+                <div class="form-group">
+                    <input type="email" id="forgot-email" placeholder="Email Address" class="form-input">
+                    <button onclick="handleForgot()" class="auth-button">SEND RESET LINK</button>
+                </div>
+                <div class="form-footer">
+                    <p onclick="showForm('login')" class="auth-link">Back to Login</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="auth-footer">
+            SECURE ADVERSARIAL AUDITED SYSTEM v1.0
+        </footer>
+    </div>
+
+    <!-- Modular JS -->
+    <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+<meta name="supabase-url" content="<?php echo getenv('SUPABASE_URL'); ?>">
+<meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+<meta name="cloudinary-cloud-name" content="<?php echo getenv('CLOUDINARY_CLOUD_NAME'); ?>">
+<meta name="cloudinary-upload-preset" content="<?php echo getenv('CLOUDINARY_UPLOAD_PRESET'); ?>">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | My Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/browse.css">
+</head>
+<body class="bg-gradient-to-br from-[#FFD700] to-[#8A2BE2] min-h-screen">
+
+    <!-- Enhanced Header -->
+    <header class="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <a href="browse.html" class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-white font-bold text-xl">B</span>
+                        </div>
+                        <h1 class="text-white text-2xl font-bold tracking-tight">BARTER BORA</h1>
+                    </a>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <a href="browse.html" class="text-white/90 font-medium hover:text-white transition">Back to Browse</a>
+                    <div class="relative group">
+                        <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-transform group-hover:scale-105">
+                            <span class="text-white font-bold text-sm">U</span>
+                        </div>
+                        <div class="absolute hidden group-hover:block right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-2 z-50">
+                            <a href="notifications.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Notifications</a>
+                            <a href="my-items.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">My Items</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-red-600 hover:bg-red-50/50 transition">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="relative py-20">
+        <div class="container mx-auto px-6 max-w-2xl">
+            <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 mb-8">
+                <div class="flex items-center space-x-6 mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center shadow-lg">
+                        <span class="text-white font-bold text-4xl">U</span>
+                    </div>
+                    <div>
+                        <h2 id="profile-name" class="text-3xl font-bold text-white mb-2"></h2>
+                        <p id="profile-username" class="text-white/70">@username</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 bg-white/5 rounded-2xl p-6">
+                    <div>
+                        <p class="text-white/60 text-sm mb-1">Email</p>
+                        <p id="profile-email" class="text-white font-medium"></p>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm mb-1">Phone Number</p>
+                        <p id="profile-phone" class="text-white font-medium">Not provided</p>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm mb-1">Location</p>
+                        <p id="profile-location" class="text-white font-medium">Not provided</p>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm mb-1">Member Since</p>
+                        <p id="profile-date" class="text-white font-medium"></p>
+                    </div>
+                </div>
+
+                <button onclick="toggleEditMode()" class="mt-6 w-full bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-3 px-6 rounded-2xl font-semibold hover:opacity-90 transition">
+                    Edit Profile
+                </button>
+            </div>
+
+            <!-- Edit Form (Hidden by default) -->
+            <div id="edit-form" class="hidden bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8">
+                <h3 class="text-2xl font-bold text-white mb-6">Edit Profile</h3>
+                <form onsubmit="handleProfileUpdate(event)" class="space-y-4">
+                    <div>
+                        <label class="text-white/80 text-sm mb-2 block">Phone Number</label>
+                        <input type="tel" id="edit-phone" class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-3 px-4 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all" placeholder="Your phone number">
+                    </div>
+                    <div>
+                        <label class="text-white/80 text-sm mb-2 block">Location</label>
+                        <input type="text" id="edit-location" class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-3 px-4 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all" placeholder="Your location">
+                    </div>
+                    <div class="flex gap-4">
+                        <button type="button" onclick="toggleEditMode()" class="flex-1 bg-white/10 text-white py-3 px-4 rounded-2xl font-semibold hover:bg-white/20 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" class="flex-1 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-3 px-4 rounded-2xl font-semibold hover:opacity-90 transition">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        let authToken = localStorage.getItem('bora_token');
+        let currentUser = JSON.parse(localStorage.getItem('user_data') || '{}');
+        let supabase;
+
+        const SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || 'https://ywbaqtegpjiwsarbkszr.supabase.co';
+        const SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YmFxdGVncGppd3NhcmJrc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE0MjE1MTksImV4cCI6MjAzNjk5NzUxOX0.2BP9dUJ1g2sGp0N7QzLmQkLm2X2X2X2X2X2X2X2X2X';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authToken) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            if (window.supabase && window.supabase.createClient) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+
+            loadProfile();
+        });
+
+        async function loadProfile() {
+            try {
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .maybeSingle();
+
+                if (error) throw error;
+
+                document.getElementById('profile-name').textContent = `${profile.first_name} ${profile.last_name}`;
+                document.getElementById('profile-username').textContent = `@${profile.username}`;
+                document.getElementById('profile-email').textContent = profile.email;
+                document.getElementById('profile-phone').textContent = profile.phone_number || 'Not provided';
+                document.getElementById('profile-location').textContent = profile.location || 'Not provided';
+                document.getElementById('profile-date').textContent = formatDate(profile.created_at);
+
+                document.getElementById('edit-phone').value = profile.phone_number || '';
+                document.getElementById('edit-location').value = profile.location || '';
+
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                alert('Error loading profile: ' + error.message);
+            }
+        }
+
+        function toggleEditMode() {
+            const editForm = document.getElementById('edit-form');
+            editForm.classList.toggle('hidden');
+        }
+
+        async function handleProfileUpdate(event) {
+            event.preventDefault();
+
+            try {
+                const { error } = await supabase
+                    .from('profiles')
+                    .update({
+                        phone_number: document.getElementById('edit-phone').value || null,
+                        location: document.getElementById('edit-location').value || null
+                    })
+                    .eq('id', currentUser.id);
+
+                if (error) throw error;
+
+                alert('Profile updated successfully!');
+                toggleEditMode();
+                loadProfile();
+
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('bora_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

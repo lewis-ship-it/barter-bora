@@ -1,0 +1,200 @@
+/* Custom Variables */
+:root {
+    --bora-gold: #D4AF37;
+    --bora-purple-mid: #702963;
+    --bora-purple-dark: #301934;
+    --bora-white-glass: rgba(255, 255, 255, 0.12);
+    --safe-top: env(safe-area-inset-top); /* Handles iPhone Notches */
+}
+
+/* Base Mobile Setup */
+* {
+    -webkit-tap-highlight-color: transparent; /* Removes the ugly blue box when tapping on mobile */
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bora-purple-dark);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden; /* Prevents side-scrolling bugs */
+}
+
+/* The Royal Gradient */
+.welcome-gradient {
+    background: linear-gradient(
+        to bottom, 
+        var(--bora-gold) -20%, /* Pushes the gold higher up for a cleaner fade */
+        var(--bora-purple-mid) 40%, 
+        var(--bora-purple-dark) 90%
+    );
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: calc(var(--safe-top) + 2rem) 1.5rem 2rem 1.5rem;
+}
+
+/* Typography - Adjusted for Mobile Screens */
+.brand-title {
+    font-size: clamp(2.5rem, 10vw, 3.5rem); /* Shrinks/Grows based on screen size */
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.05em;
+    margin: 0;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+}
+
+.brand-subtitle {
+    color: #fef08a;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+/* The Mobile Card (The Mat) */
+.welcome-card {
+    width: 100%;
+    max-width: 400px; /* Forces mobile-width even on Desktop */
+    background: var(--bora-white-glass);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 2.5rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+/* Step Icons/Text */
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.step {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.step-num {
+    color: var(--bora-gold);
+    font-weight: 900;
+    font-size: 1.1rem;
+}
+
+.step-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.highlight {
+    font-weight: 800;
+    color: white;
+}
+
+/* Button - Built for Thumbs */
+.cta-button {
+    width: 100%;
+    background-color: var(--bora-gold);
+    color: var(--bora-purple-dark);
+    font-weight: 900;
+    font-size: 1rem;
+    padding: 1.25rem 0; /* Larger "Tap Target" for thumbs */
+    border-radius: 1.25rem;
+    margin-top: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: none;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.1s ease;
+}
+
+/* Mobile Interaction: Button shrinks slightly when pressed */
+.cta-button:active {
+    transform: scale(0.96);
+    background-color: #e5c14f;
+}
+
+/* Ads - Mobile Banner Style */
+.ad-slot {
+    width: 100%;
+    max-width: 400px;
+    height: 60px; /* Standard mobile banner height */
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ad-text {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: rgba(255, 255, 255, 0.3);
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+.animate-shake {
+    animation: shake 0.2s ease-in-out 0s 2;
+}
+.border-red-500 {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+.hidden-form { display: none; }
+
+/* Mobile safe inputs */
+input:focus { outline: 2px solid var(--bora-gold); }
+
+.border-red-500 {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+.animate-shake {
+    animation: shake 0.2s ease-in-out 0s 2;
+}
+
+/* ... include your existing welcome-gradient and card styles here ... */
+/* Custom Bora Scroller */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#feed-container {
+    scroll-behavior: smooth;
+}
+
+.bg-bora-dark {
+    background-color: #0a0a0a;
+}

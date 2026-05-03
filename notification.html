@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+    <meta name="supabase-url"           content="<?php echo getenv('SUPABASE_URL'); ?>">
+    <meta name="supabase-anon-key"      content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | Notifications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/browse.css">
+</head>
+<body class="bg-gradient-to-br from-[#FFD700] to-[#8A2BE2] min-h-screen">
+
+<!-- Header -->
+<header class="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="browse.html" class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-xl flex items-center justify-center shadow-lg">
+                <span class="text-white font-bold text-xl">B</span>
+            </div>
+            <h1 class="text-white text-2xl font-bold tracking-tight">BARTER BORA</h1>
+        </a>
+        <div class="flex items-center space-x-6">
+            <span id="user-greeting" class="text-white/90 font-medium hidden md:block"></span>
+            <div class="relative group">
+                <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center cursor-pointer shadow-lg group-hover:scale-105 transition-transform">
+                    <span class="text-white font-bold text-sm" id="avatar-letter">U</span>
+                </div>
+                <div class="absolute hidden group-hover:block right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-2 z-50">
+                    <a href="profile.html"    class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Profile</a>
+                    <a href="my-items.html"   class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">My Items</a>
+                    <a href="browse.html"     class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Browse</a>
+                    <div class="border-t border-gray-200 my-1"></div>
+                    <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-red-600 hover:bg-red-50/50 transition">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="py-16">
+    <div class="container mx-auto px-6 max-w-2xl">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h2 class="text-4xl font-bold text-white mb-1">Notifications</h2>
+                <p class="text-white/70">Swap proposals and trade updates</p>
+            </div>
+            <button onclick="markAllRead()"
+                    class="text-sm text-white/70 hover:text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition">
+                Mark all read
+            </button>
+        </div>
+        <div id="notifications-container" class="space-y-4">
+            <div class="text-center py-20">
+                <div class="loading mx-auto mb-4"></div>
+                <p class="text-white/60">Loading notifications…</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bid Detail Modal -->
+<div id="bid-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+    <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-2xl border-2 border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]">
+        <div class="flex justify-between items-start mb-8">
+            <h3 class="text-2xl font-bold text-white">Swap Details</h3>
+            <button onclick="closeBidModal()" class="text-white/60 hover:text-white p-2 rounded-lg hover:bg-white/10 transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <div id="bid-modal-content" class="space-y-6"></div>
+        <div id="bid-modal-actions" class="flex gap-4 mt-8"></div>
+    </div>
+</div>
+
+<!-- Contact Info Modal -->
+<div id="contact-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+    <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-md border-2 border-white/10 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-white">Trading Partner Contact</h3>
+            <button onclick="closeContactModal()" class="text-white/60 hover:text-white p-2 rounded-lg hover:bg-white/10 transition">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="bg-green-500/10 border border-green-500/30 rounded-2xl p-4 mb-6 flex items-center gap-3">
+            <i class="fas fa-check-circle text-green-400 text-xl"></i>
+            <p class="text-green-300 text-sm">Swap accepted! You can now connect with your trading partner.</p>
+        </div>
+        <div id="contact-details" class="space-y-4"></div>
+        <button onclick="closeContactModal()" class="mt-6 w-full bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-3 rounded-2xl font-semibold hover:opacity-90 transition">
+            Done
+        </button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const API_BASE   = '/api';
+const authToken  = localStorage.getItem('bora_token');
+const currentUser= JSON.parse(localStorage.getItem('user_data') || '{}');
+
+const SUPABASE_URL      = document.querySelector('meta[name="supabase-url"]')?.content || '';
+const SUPABASE_ANON_KEY = document.querySelector('meta[name="supabase-anon-key"]')?.content || '';
+let supabase;
+if (window.supabase?.createClient) supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!authToken) { window.location.href = 'auth.html'; return; }
+
+    if (currentUser.username) {
+        document.getElementById('user-greeting').textContent = `Welcome, ${currentUser.username}`;
+        document.getElementById('user-greeting').classList.remove('hidden');
+        document.getElementById('avatar-letter').textContent = currentUser.username.charAt(0).toUpperCase();
+    }
+    loadNotifications();
+});
+
+async function loadNotifications() {
+    const container = document.getElementById('notifications-container');
+    try {
+        const res = await fetch(`${API_BASE}/notifications.php?user_id=${encodeURIComponent(currentUser.id)}`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const notifications = await res.json();
+
+        if (!notifications?.length) {
+            container.innerHTML = `<div class="text-center py-20">
+                <div class="text-white/40 text-6xl mb-4">🔔</div>
+                <h3 class="text-white text-xl mb-2">No notifications</h3>
+                <p class="text-white/60">You're all caught up!</p></div>`;
+            return;
+        }
+
+        const typeConfig = {
+            bid_received: { icon: 'fas fa-gift',         color: 'text-[#FFD700]', label: 'New Swap Proposal' },
+            bid_accepted: { icon: 'fas fa-check-circle', color: 'text-green-400',  label: 'Swap Accepted! 🎉' },
+            bid_rejected: { icon: 'fas fa-times-circle', color: 'text-red-400',    label: 'Swap Declined'   }
+        };
+
+        container.innerHTML = notifications.map(n => {
+            const cfg = typeConfig[n.type] || { icon: 'fas fa-bell', color: 'text-white', label: n.type };
+            return `
+            <div class="bg-white/10 backdrop-blur-lg border ${n.read ? 'border-white/10' : 'border-white/30'} rounded-2xl p-6
+                        hover:bg-white/15 transition cursor-pointer"
+                 onclick="openBidModal('${n.bid_id}', '${n.id}', '${n.type}')">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="${cfg.icon} ${cfg.color}"></i>
+                            <h4 class="text-white font-semibold">${cfg.label}</h4>
+                        </div>
+                        <p class="text-white/70 text-sm leading-relaxed">${escHtml(n.title)}</p>
+                        <p class="text-white/40 text-xs mt-2">${formatDate(n.created_at)}</p>
+                    </div>
+                    ${!n.read ? '<span class="w-3 h-3 bg-[#FFD700] rounded-full flex-shrink-0 mt-1"></span>' : ''}
+                </div>
+            </div>`;
+        }).join('');
+
+    } catch (err) {
+        container.innerHTML = `<div class="text-center py-20">
+            <div class="text-6xl mb-4">⚠️</div>
+            <h3 class="text-white text-xl mb-2">Error loading notifications</h3>
+            <p class="text-white/60">${escHtml(err.message)}</p></div>`;
+    }
+}
+
+async function openBidModal(bidId, notifId, notifType) {
+    // Mark notification as read
+    if (notifId) {
+        fetch(`${API_BASE}/notifications.php`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+            body: JSON.stringify({ id: notifId })
+        });
+    }
+
+    const modal   = document.getElementById('bid-modal');
+    const content = document.getElementById('bid-modal-content');
+    const actions = document.getElementById('bid-modal-actions');
+
+    content.innerHTML = `<div class="text-center py-8"><div class="loading mx-auto mb-2"></div><p class="text-white/60">Loading…</p></div>`;
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+
+    try {
+        const { data: bid, error } = await supabase
+            .from('bids')
+            .select(`
+                *,
+                proposer:proposer_id (id, first_name, last_name, username),
+                proposer_item:proposer_item_id (title, condition, imageurl),
+                target_item:target_item_id (title, condition, imageurl)
+            `)
+            .eq('id', bidId)
+            .maybeSingle();
+
+        if (error) throw error;
+        if (!bid) throw new Error('Bid not found');
+
+        const cMap = { new:'New', like_new:'Like New', good:'Good', fair:'Fair', poor:'Poor' };
+        const isTargetOwner = bid.target_owner_id === currentUser.id;
+
+        content.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <p class="text-white/60 text-sm mb-2 uppercase tracking-wide text-xs font-semibold">
+                        ${isTargetOwner ? 'Their Offer' : 'Your Offer'}
+                    </p>
+                    <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                        <img src="${bid.proposer_item?.imageurl || 'https://via.placeholder.com/200'}"
+                             alt="" class="w-full h-36 rounded-xl object-cover mb-3">
+                        <h4 class="text-white font-semibold mb-1">${escHtml(bid.proposer_item?.title || '')}</h4>
+                        <p class="text-white/50 text-xs uppercase">${cMap[bid.proposer_item?.condition] || ''}</p>
+                        <p class="text-white/60 text-sm mt-2">From: ${escHtml(bid.proposer?.first_name + ' ' + bid.proposer?.last_name)}</p>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-white/60 text-sm mb-2 uppercase tracking-wide text-xs font-semibold">
+                        ${isTargetOwner ? 'Your Item' : 'Their Item'}
+                    </p>
+                    <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                        <img src="${bid.target_item?.imageurl || 'https://via.placeholder.com/200'}"
+                             alt="" class="w-full h-36 rounded-xl object-cover mb-3">
+                        <h4 class="text-white font-semibold mb-1">${escHtml(bid.target_item?.title || '')}</h4>
+                        <p class="text-white/50 text-xs uppercase">${cMap[bid.target_item?.condition] || ''}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white/5 rounded-2xl p-4 flex items-center justify-between">
+                <div>
+                    <p class="text-white/60 text-xs uppercase tracking-wide mb-1">Status</p>
+                    <p class="text-white font-semibold capitalize">${bid.status}</p>
+                </div>
+                <div>
+                    <p class="text-white/60 text-xs uppercase tracking-wide mb-1">Date</p>
+                    <p class="text-white/80 text-sm">${formatDate(bid.created_at)}</p>
+                </div>
+            </div>`;
+
+        // Render action buttons
+        if (bid.status === 'accepted') {
+            actions.innerHTML = `
+                <button onclick="viewContact('${bidId}')"
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold transition flex items-center justify-center gap-2">
+                    <i class="fas fa-address-card"></i> View Contact Info
+                </button>
+                <button onclick="closeBidModal()" class="flex-1 bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-xl font-semibold transition">Close</button>`;
+
+        } else if (bid.status === 'pending' && isTargetOwner) {
+            actions.innerHTML = `
+                <button onclick="handleBidAction('${bidId}', 'accepted')"
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold transition flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i> Accept Swap
+                </button>
+                <button onclick="handleBidAction('${bidId}', 'rejected')"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold transition flex items-center justify-center gap-2">
+                    <i class="fas fa-times"></i> Decline
+                </button>`;
+
+        } else if (bid.status === 'pending' && !isTargetOwner) {
+            actions.innerHTML = `
+                <button onclick="handleBidAction('${bidId}', 'cancelled')"
+                        class="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 px-4 rounded-xl font-semibold transition">
+                    Cancel Proposal
+                </button>
+                <button onclick="closeBidModal()" class="flex-1 bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-xl font-semibold transition">Close</button>`;
+
+        } else {
+            actions.innerHTML = `<button onclick="closeBidModal()" class="flex-1 bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-xl font-semibold transition">Close</button>`;
+        }
+
+    } catch (err) {
+        content.innerHTML = `<p class="text-red-400 text-center py-4">${escHtml(err.message)}</p>`;
+        actions.innerHTML = `<button onclick="closeBidModal()" class="flex-1 bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-xl font-semibold transition">Close</button>`;
+    }
+}
+
+async function handleBidAction(bidId, action) {
+    const btns = document.querySelectorAll('#bid-modal-actions button');
+    btns.forEach(b => b.disabled = true);
+
+    try {
+        const res  = await fetch(`${API_BASE}/bids.php`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+            body: JSON.stringify({ id: bidId, status: action, updater_id: currentUser.id })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+
+        closeBidModal();
+        loadNotifications();
+
+        if (action === 'accepted') {
+            setTimeout(() => viewContact(bidId), 300);
+        }
+
+    } catch (err) {
+        alert('Error: ' + err.message);
+        btns.forEach(b => b.disabled = false);
+    }
+}
+
+async function viewContact(bidId) {
+    const modal   = document.getElementById('contact-modal');
+    const details = document.getElementById('contact-details');
+
+    details.innerHTML = `<div class="text-center py-6"><div class="loading mx-auto mb-2"></div><p class="text-white/60">Loading contact…</p></div>`;
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+
+    try {
+        const res = await fetch(
+            `${API_BASE}/contact.php?bid_id=${encodeURIComponent(bidId)}&requester_id=${encodeURIComponent(currentUser.id)}`,
+            { headers: { 'Authorization': `Bearer ${authToken}` } }
+        );
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+
+        details.innerHTML = `
+            <div class="bg-white/5 rounded-2xl p-5 space-y-3">
+                <div class="flex items-center gap-3 pb-3 border-b border-white/10">
+                    <div class="w-14 h-14 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">${(data.first_name || '?').charAt(0).toUpperCase()}</span>
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-lg">${escHtml(data.first_name + ' ' + data.last_name)}</p>
+                        <p class="text-white/60 text-sm">@${escHtml(data.username)}</p>
+                    </div>
+                </div>
+                ${data.email ? `
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-envelope text-[#FFD700] w-5"></i>
+                    <div>
+                        <p class="text-white/50 text-xs">Email</p>
+                        <a href="mailto:${escAttr(data.email)}" class="text-white hover:text-[#FFD700] transition font-medium">${escHtml(data.email)}</a>
+                    </div>
+                </div>` : ''}
+                ${data.phone_number ? `
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-phone text-[#FFD700] w-5"></i>
+                    <div>
+                        <p class="text-white/50 text-xs">Phone</p>
+                        <a href="tel:${escAttr(data.phone_number)}" class="text-white hover:text-[#FFD700] transition font-medium">${escHtml(data.phone_number)}</a>
+                    </div>
+                </div>` : ''}
+                ${data.location ? `
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-map-marker-alt text-[#FFD700] w-5"></i>
+                    <div>
+                        <p class="text-white/50 text-xs">Location</p>
+                        <p class="text-white font-medium">${escHtml(data.location)}</p>
+                    </div>
+                </div>` : ''}
+            </div>
+            <p class="text-white/40 text-xs text-center mt-3">
+                <i class="fas fa-shield-alt mr-1"></i>
+                Contact info is only shared between accepted swap partners
+            </p>`;
+
+    } catch (err) {
+        details.innerHTML = `<p class="text-red-400 text-center py-4">${escHtml(err.message)}</p>`;
+    }
+}
+
+async function markAllRead() {
+    await fetch(`${API_BASE}/notifications.php`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ user_id: currentUser.id, mark_all: true })
+    });
+    loadNotifications();
+}
+
+function closeBidModal() {
+    document.getElementById('bid-modal').classList.add('hidden');
+    document.getElementById('bid-modal').classList.remove('flex');
+}
+function closeContactModal() {
+    document.getElementById('contact-modal').classList.add('hidden');
+    document.getElementById('contact-modal').classList.remove('flex');
+}
+function formatDate(s) {
+    if (!s) return '';
+    return new Date(s).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+function escHtml(str) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(String(str || '')));
+    return d.innerHTML;
+}
+function escAttr(str) { return String(str || '').replace(/'/g,"&#39;").replace(/"/g,"&quot;"); }
+function handleLogout() {
+    localStorage.removeItem('bora_token');
+    localStorage.removeItem('user_data');
+    window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,4263 @@
+BARTER BORA - FULL PROJECT DUMP
+==============================
+
+
+################################################################################
+FILE: .\auth.html
+################################################################################
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+<meta name="supabase-url" content="<?php echo getenv('SUPABASE_URL'); ?>">
+<meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+<meta name="cloudinary-cloud-name" content="<?php echo getenv('CLOUDINARY_CLOUD_NAME'); ?>">
+<meta name="cloudinary-upload-preset" content="<?php echo getenv('CLOUDINARY_UPLOAD_PRESET'); ?>">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+    <title>Join Barter Bora</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Modular CSS -->
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <header class="auth-header">
+            <h1 class="brand-title">BARTER BORA</h1>
+            <p class="brand-subtitle">Better Trading. Zero Cash.</p>
+        </header>
+
+        <main class="auth-card">
+            <!-- Success Message -->
+            <div id="success-message" class="message success-message hidden">
+                <span class="message-icon">✓</span>
+                <span class="message-text"></span>
+            </div>
+            
+            <!-- Error Message -->
+            <div id="error-message" class="message error-message hidden">
+                <span class="message-icon">⚠</span>
+                <span class="message-text"></span>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="login-form" class="form-container">
+                <h2 class="form-title">Welcome Back</h2>
+                <div class="form-group">
+                    <input type="email" id="login-email" placeholder="Email Address" class="form-input">
+                    <input type="password" id="login-password" placeholder="Password" class="form-input">
+                    <button onclick="handleLogin()" class="auth-button">LOG IN</button>
+                </div>
+                <div class="form-footer">
+                    <p onclick="showForm('signup')" class="auth-link">Don't have an account? <span>Sign Up</span></p>
+                    <p onclick="showForm('forgot')" class="auth-link text-sm">Forgot Password?</p>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="form-container hidden">
+                <h2 class="form-title">Create Account</h2>
+                <div class="form-group">
+                    <div class="name-group">
+                        <input type="text" id="reg-fname" placeholder="First Name" class="form-input">
+                        <input type="text" id="reg-lname" placeholder="Last Name" class="form-input">
+                    </div>
+                    <input type="text" id="reg-username" placeholder="Unique Username" class="form-input">
+                    <input type="email" id="reg-email" placeholder="Email Address" class="form-input">
+                    <input type="tel" id="reg-phone" placeholder="Phone Number" class="form-input">
+                    <input type="text" id="reg-location" placeholder="Location" class="form-input">
+                    <input type="password" id="reg-password" placeholder="Create Password" class="form-input">
+                    <input type="password" id="reg-confirm-password" placeholder="Confirm Password" class="form-input">
+                    <div id="password-requirements" class="requirements">
+                        <p class="requirement-title">Password must include:</p>
+                        <p id="req-length" class="requirement"><span class="req-icon">◯</span> At least 8 characters</p>
+                        <p id="req-uppercase" class="requirement"><span class="req-icon">◯</span> One uppercase letter</p>
+                        <p id="req-number" class="requirement"><span class="req-icon">◯</span> One number</p>
+                    </div>
+                    <button onclick="handleSignup()" class="auth-button">CREATE ACCOUNT</button>
+                </div>
+                <div class="form-footer">
+                    <p onclick="showForm('login')" class="auth-link">Already have an account? <span>Log In</span></p>
+                </div>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div id="forgot-form" class="form-container hidden">
+                <h2 class="form-title">Reset Password</h2>
+                <div class="form-group">
+                    <input type="email" id="forgot-email" placeholder="Email Address" class="form-input">
+                    <button onclick="handleForgot()" class="auth-button">SEND RESET LINK</button>
+                </div>
+                <div class="form-footer">
+                    <p onclick="showForm('login')" class="auth-link">Back to Login</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="auth-footer">
+            SECURE ADVERSARIAL AUDITED SYSTEM v1.0
+        </footer>
+    </div>
+
+    <!-- Modular JS -->
+    <script src="js/auth.js"></script>
+</body>
+</html>
+
+
+################################################################################
+FILE: .\browse.html
+################################################################################
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+<meta name="supabase-url" content="<?php echo getenv('SUPABASE_URL'); ?>">
+<meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+<meta name="cloudinary-cloud-name" content="<?php echo getenv('CLOUDINARY_CLOUD_NAME'); ?>">
+<meta name="cloudinary-upload-preset" content="<?php echo getenv('CLOUDINARY_UPLOAD_PRESET'); ?>">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/browse.css">
+</head>
+<body class="bg-gradient-to-br from-[#FFD700] to-[#8A2BE2] min-h-screen">
+
+    <!-- Enhanced Header -->
+    <header class="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-xl flex items-center justify-center shadow-lg">
+                        <span class="text-white font-bold text-xl">B</span>
+                    </div>
+                    <h1 class="text-white text-2xl font-bold tracking-tight">BARTER BORA</h1>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <span id="user-greeting" class="text-white/90 font-medium hidden md:block text-lg"></span>
+
+                    <div class="relative" id="user-menu-container">
+                        <button id="user-menu-btn" class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-transform hover:scale-105 focus:outline-none" aria-label="User menu" aria-expanded="false">
+                            <span class="text-white font-bold text-sm" id="user-avatar-letter">U</span>
+                        </button>
+                        <div id="user-dropdown" class="absolute hidden right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-2 z-50">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Profile</a>
+                            <a href="my-items.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">My Items</a>
+                            <a href="notifications.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Notifications</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Settings</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-red-600 hover:bg-red-50/50 transition">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Enhanced Hero Section -->
+    <section class="relative py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-white/10 backdrop-blur-md rounded-2xl px-8 py-4 mb-6 border border-white/20">
+                    <h2 class="text-5xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-white to-[#FFE44D] bg-clip-text text-transparent">
+                        Welcome to Barter Bora
+                    </h2>
+                </div>
+                <p class="text-white/90 text-xl max-w-3xl mx-auto leading-relaxed">
+                    Discover amazing items and trade what you don't need for what you truly want.
+                    No money involved—just smart swapping.
+                </p>
+            </div>
+
+            <!-- Enhanced Search and Filters -->
+            <div class="bg-white/15 backdrop-blur-xl rounded-3xl p-8 mb-16 border border-white/20 shadow-2xl">
+                <div class="flex flex-col lg:flex-row gap-6 items-center">
+                    <div class="flex-1 w-full">
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 text-lg"></i>
+                            <input type="text" placeholder="Search for items, categories, or users..."
+                                   class="w-full bg-white/10 border-2 border-white/20 rounded-2xl py-4 pl-12 pr-6 text-white placeholder-white/60 focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all duration-200 text-lg">
+                        </div>
+                    </div>
+                    <div class="flex gap-4 flex-wrap justify-center">
+                        <select class="bg-white/10 border-2 border-white/20 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all appearance-none">
+                            <option class="bg-[#2d3047]">All Categories</option>
+                            <option class="bg-[#2d3047]">Electronics</option>
+                            <option class="bg-[#2d3047]">Furniture</option>
+                            <option class="bg-[#2d3047]">Clothing</option>
+                            <option class="bg-[#2d3047]">Books</option>
+                            <option class="bg-[#2d3047]">Other</option>
+                        </select>
+                        <select class="bg-white/10 border-2 border-white/20 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all appearance-none">
+                            <option class="bg-[#2d3047]">Sort by: Newest</option>
+                            <option class="bg-[#2d3047]">Sort by: Condition</option>
+                            <option class="bg-[#2d3047]">Sort by: Popular</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Items Grid -->
+            <div class="mb-16">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-3xl font-bold text-white">Available Items</h3>
+                    <span class="bg-white/10 text-white/80 px-4 py-2 rounded-xl text-sm">
+                        <span id="items-count">0</span> items found
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="items-grid">
+                    <!-- Items will be loaded here from Supabase -->
+                </div>
+
+                <div class="text-center mt-12" id="load-more-container">
+                    <button class="bg-white/10 hover:bg-white/20 border-2 border-white/20 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-200 hover:scale-105">
+                        Load More Items
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Create Item Modal -->
+    <div id="create-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+        <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-2xl border-2 border-white/10 shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold text-white">Create New Listing</h3>
+                <button id="close-create-modal" class="text-white/60 hover:text-white transition p-2 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <form id="create-item-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-white/80 text-sm mb-3 block font-medium">Item Title*</label>
+                        <input type="text" name="title" required
+                               class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all">
+                    </div>
+
+                    <div>
+                        <label class="text-white/80 text-sm mb-3 block font-medium">Condition*</label>
+                        <select name="condition" required
+                                class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all appearance-none">
+                            <option value="">Select Condition</option>
+                            <option value="new">New</option>
+                            <option value="like_new">Like New</option>
+                            <option value="good">Good</option>
+                            <option value="fair">Fair</option>
+                            <option value="poor">Poor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-white/80 text-sm mb-3 block font-medium">Description*</label>
+                    <textarea name="description" required rows="4"
+                              class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-white/80 text-sm mb-3 block font-medium">Status</label>
+                        <select name="status"
+                                class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all appearance-none">
+                            <option value="available">Available</option>
+                            <option value="pending">Pending Trade</option>
+                            <option value="traded">Traded</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-white/80 text-sm mb-3 block font-medium">Upload Image</label>
+                        <div class="border-2 border-dashed border-white/20 rounded-2xl p-6 text-center cursor-pointer transition-all hover:border-[#FFD700] hover:bg-white/5"
+                             onclick="document.getElementById('item-image').click()">
+                            <i class="fas fa-cloud-upload-alt text-white/40 text-3xl mb-3"></i>
+                            <p class="text-white/60 text-sm mb-1">Click to upload or drag and drop</p>
+                            <p class="text-white/40 text-xs" id="file-name">PNG, JPG up to 10MB</p>
+                            <input type="file" class="hidden" id="item-image" accept="image/*" onchange="updateFileName(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-4 px-6 rounded-2xl font-bold hover:opacity-90 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                    <span class="flex items-center justify-center">
+                        <i class="fas fa-plus-circle mr-3"></i>
+                        LIST ITEM FOR TRADE
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Enhanced Item Detail Modal -->
+    <div id="detail-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+        <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-4xl border-2 border-white/10 shadow-2xl">
+            <div class="flex justify-between items-start mb-8">
+                <div>
+                    <h3 id="modal-title" class="text-3xl font-bold text-white mb-2"></h3>
+                    <div class="flex items-center space-x-4">
+                        <span id="modal-condition" class="bg-[#FFD700]/20 text-[#FFD700] px-4 py-2 rounded-xl text-sm font-bold"></span>
+                        <span id="modal-status" class="bg-white/10 text-white/80 px-4 py-2 rounded-xl text-sm"></span>
+                    </div>
+                </div>
+                <button id="close-detail-modal" class="text-white/60 hover:text-white transition p-2 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="rounded-2xl overflow-hidden">
+                    <img id="modal-image" src="" alt="" class="w-full h-72 object-cover rounded-2xl">
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-white/80 text-sm mb-2 font-medium">Description</h4>
+                        <p id="modal-description" class="text-white/90 leading-relaxed"></p>
+                    </div>
+
+                    <div class="bg-white/5 rounded-2xl p-6">
+                        <h4 class="text-white/80 text-sm mb-4 font-medium">Item Owner</h4>
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold">U</span>
+                            </div>
+                            <div>
+                                <p id="modal-owner" class="text-white font-semibold"></p>
+                                <p class="text-white/60 text-sm">Member since <span id="modal-date"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex space-x-4">
+                <button id="close-modal-btn"
+                        class="flex-1 bg-white/10 text-white py-4 px-6 rounded-2xl font-semibold hover:bg-white/20 transition-all duration-200">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Browse
+                </button>
+                <button id="propose-swap-btn" class="flex-1 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-4 px-6 rounded-2xl font-bold hover:opacity-90 transition-all duration-200 hover:scale-[1.02]">
+                    <i class="fas fa-exchange-alt mr-2"></i>PROPOSE SWAP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swap Modal -->
+    <div id="swap-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#1a1b25] rounded-3xl p-8 w-full max-w-xl border border-white/10">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">Propose a Swap</h3>
+                <button onclick="hideSwapModal()" class="text-white/60 hover:text-white transition p-2 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <p class="text-white/60 mb-4">Select an item from your collection to offer for <span id="swap-target-item" class="font-semibold text-white"></span>:</p>
+
+            <!-- User's items list -->
+            <div id="my-items-list" class="space-y-3 max-h-60 overflow-y-auto mb-6 p-2">
+                <div class="text-center py-8">
+                    <div class="loading mx-auto mb-4"></div>
+                    <p class="text-white/60">Loading your items...</p>
+                </div>
+            </div>
+
+            <div class="bg-white/5 rounded-2xl p-4 mb-6 hidden" id="selected-item-preview">
+                <p class="text-white/80 text-sm mb-2">You're offering:</p>
+                <div class="flex items-center space-x-3">
+                    <img id="selected-item-image" src="" alt="" class="w-12 h-12 rounded-lg object-cover">
+                    <div>
+                        <h4 id="selected-item-title" class="text-white font-semibold text-sm"></h4>
+                        <p id="selected-item-condition" class="text-white/60 text-xs"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Actions -->
+            <div class="flex space-x-4">
+                <button onclick="hideSwapModal()"
+                        class="flex-1 px-6 py-4 rounded-2xl bg-white/5 text-white font-semibold hover:bg-white/10 transition-all duration-200">
+                    Cancel
+                </button>
+                <button id="confirm-swap-btn" disabled
+                        class="flex-1 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white font-bold opacity-50 cursor-not-allowed transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                    <span class="flex items-center justify-center">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        SEND PROPOSAL
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="create-item-btn">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <!-- Supabase client MUST load before app scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/browse.js"></script>
+
+</body>
+</html>
+
+
+################################################################################
+FILE: .\index.html
+################################################################################
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | Better Trading</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind for rapid layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen px-4 py-12">
+
+    <!-- Header Section -->
+    <header class="text-center mb-12">
+        <h1 class="brand-title">BARTER BORA</h1>
+        <p class="brand-subtitle">Better Trading. Zero Cash.</p>
+    </header>
+
+    <!-- The Mat (Card) -->
+    <main class="welcome-card">
+        <h2 class="section-title">How It Works</h2>
+        
+        <div class="steps-container">
+            <div class="step">
+                <span class="step-num">01</span>
+                <p class="step-text">
+                    <span class="highlight">List:</span> Post items you don't need (like 100 chairs).
+                </p>
+            </div>
+
+            <div class="step">
+                <span class="step-num">02</span>
+                <p class="step-text">
+                    <span class="highlight">Find:</span> Browse for things you actually want.
+                </p>
+            </div>
+
+            <div class="step">
+                <span class="step-num">03</span>
+                <p class="step-text">
+                    <span class="highlight">Swap:</span> Make a bid. No money ever changes hands.
+                </p>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <a href="auth.html" class="cta-button">START SWAPPING</a>
+    </main>
+
+    <!-- Modular Ad Slot -->
+    <footer class="mt-16 ad-slot">
+        <p class="ad-text">Ad Space Available</p>
+    </footer>
+
+</body>
+</html>
+
+
+################################################################################
+FILE: .\my_items.html
+################################################################################
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+<meta name="supabase-url" content="<?php echo getenv('SUPABASE_URL'); ?>">
+<meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+<meta name="cloudinary-cloud-name" content="<?php echo getenv('CLOUDINARY_CLOUD_NAME'); ?>">
+<meta name="cloudinary-upload-preset" content="<?php echo getenv('CLOUDINARY_UPLOAD_PRESET'); ?>">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | My Items</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/browse.css">
+</head>
+<body class="bg-gradient-to-br from-[#FFD700] to-[#8A2BE2] min-h-screen">
+
+    <!-- Enhanced Header -->
+    <header class="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <a href="browse.html" class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-white font-bold text-xl">B</span>
+                        </div>
+                        <h1 class="text-white text-2xl font-bold tracking-tight">BARTER BORA</h1>
+                    </a>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <a href="browse.html" class="text-white/90 font-medium hover:text-white transition">Browse Items</a>
+                    <div class="relative group">
+                        <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-transform group-hover:scale-105">
+                            <span class="text-white font-bold text-sm">U</span>
+                        </div>
+                        <div class="absolute hidden group-hover:block right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-2 z-50">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Profile</a>
+                            <a href="notifications.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Notifications</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-red-600 hover:bg-red-50/50 transition">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="relative py-20">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between mb-12">
+                <div>
+                    <h2 class="text-4xl font-bold text-white mb-2">My Items</h2>
+                    <p class="text-white/70">Manage your listings and track bids</p>
+                </div>
+                <a href="browse.html" onclick="showCreateModal(); return false;" class="bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white px-6 py-3 rounded-2xl font-semibold hover:opacity-90 transition flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Add New Item
+                </a>
+            </div>
+
+            <!-- Items Grid -->
+            <div id="items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="col-span-full text-center py-20">
+                    <div class="loading mx-auto mb-4"></div>
+                    <p class="text-white/60">Loading your items...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Item Detail Modal -->
+    <div id="item-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+        <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-2xl border-2 border-white/10 shadow-2xl">
+            <div class="flex justify-between items-start mb-8">
+                <h3 id="modal-title" class="text-2xl font-bold text-white"></h3>
+                <button onclick="closeItemModal()" class="text-white/60 hover:text-white transition p-2 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <img id="modal-image" src="" alt="" class="w-full h-64 rounded-2xl object-cover">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <p class="text-white/60 text-sm mb-1">Condition</p>
+                        <p id="modal-condition" class="text-white font-semibold"></p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <p class="text-white/60 text-sm mb-1">Status</p>
+                        <p id="modal-status" class="text-white font-semibold capitalize"></p>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 rounded-xl p-4">
+                    <p class="text-white/60 text-sm mb-2">Description</p>
+                    <p id="modal-description" class="text-white"></p>
+                </div>
+
+                <div class="bg-white/5 rounded-xl p-4">
+                    <p class="text-white/60 text-sm mb-3">Bids Received</p>
+                    <div id="bids-list" class="space-y-2">
+                        <p class="text-white/40 text-sm">Loading bids...</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="closeItemModal()" class="flex-1 bg-white/10 text-white py-3 px-4 rounded-2xl font-semibold hover:bg-white/20 transition">
+                        Close
+                    </button>
+                    <button id="delete-btn" onclick="deleteItem()" class="flex-1 bg-red-600 text-white py-3 px-4 rounded-2xl font-semibold hover:bg-red-700 transition">
+                        Delete Item
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        let authToken = localStorage.getItem('bora_token');
+        let currentUser = JSON.parse(localStorage.getItem('user_data') || '{}');
+        let supabase;
+        let currentItemId = null;
+
+        const SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || 'https://ywbaqtegpjiwsarbkszr.supabase.co';
+        const SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YmFxdGVncGppd3NhcmJrc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE0MjE1MTksImV4cCI6MjAzNjk5NzUxOX0.2BP9dUJ1g2sGp0N7QzLmQkLm2X2X2X2X2X2X2X2X2X';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authToken) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            if (window.supabase && window.supabase.createClient) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+
+            loadMyItems();
+        });
+
+        async function loadMyItems() {
+            const container = document.getElementById('items-container');
+
+            try {
+                const { data: items, error } = await supabase
+                    .from('items')
+                    .select('*')
+                    .eq('ownerid', currentUser.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!items || items.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full text-center py-20">
+                            <div class="text-white/40 text-6xl mb-4">📭</div>
+                            <h3 class="text-white text-xl mb-2">No items yet</h3>
+                            <p class="text-white/60 mb-6">Start listing items to begin trading</p>
+                            <a href="browse.html" class="inline-block bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white px-6 py-3 rounded-2xl font-semibold hover:opacity-90 transition">
+                                Create First Item
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = items.map(item => `
+                    <div class="item-card cursor-pointer" onclick="showItemDetails('${item.id}')">
+                        <div class="item-image flex items-center justify-center">
+                            ${item.imageurl ? `<img src="${item.imageurl}" alt="${item.title}" class="w-full h-full object-cover">` : `<div class="text-white/20"><i class="fas fa-image text-6xl"></i></div>`}
+                            <div class="absolute top-4 right-4 ${getConditionClass(item.condition)} px-3 py-1 rounded-xl text-xs font-bold uppercase">
+                                ${getConditionText(item.condition)}
+                            </div>
+                            <div class="absolute top-4 left-4 bg-black/70 px-3 py-1 rounded-xl text-xs text-white uppercase">
+                                ${item.status}
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-white font-semibold text-lg mb-3 line-clamp-2">${item.title}</h4>
+                            <p class="text-white/70 text-sm mb-4 line-clamp-2">${item.description}</p>
+                            <p class="text-white/40 text-xs">${formatDate(item.created_at)}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading items:', error);
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <div class="text-white/40 text-6xl mb-4">⚠️</div>
+                        <h3 class="text-white text-xl mb-2">Error loading items</h3>
+                        <p class="text-white/60">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function showItemDetails(itemId) {
+            const modal = document.getElementById('item-modal');
+
+            try {
+                currentItemId = itemId;
+
+                const { data: item, error } = await supabase
+                    .from('items')
+                    .select('*')
+                    .eq('id', itemId)
+                    .maybeSingle();
+
+                if (error) throw error;
+
+                document.getElementById('modal-title').textContent = item.title;
+                document.getElementById('modal-image').src = item.imageurl || 'https://via.placeholder.com/400';
+                document.getElementById('modal-condition').textContent = getConditionText(item.condition);
+                document.getElementById('modal-status').textContent = item.status;
+                document.getElementById('modal-description').textContent = item.description;
+
+                // Load bids for this item
+                const { data: bids } = await supabase
+                    .from('bids')
+                    .select(`
+                        *,
+                        proposer:proposer_id (first_name, last_name, username)
+                    `)
+                    .eq('target_item_id', itemId)
+                    .order('created_at', { ascending: false });
+
+                const bidsList = document.getElementById('bids-list');
+                if (bids && bids.length > 0) {
+                    bidsList.innerHTML = bids.map(bid => `
+                        <div class="bg-white/5 rounded-lg p-3">
+                            <p class="text-white font-semibold text-sm">${bid.proposer.first_name} ${bid.proposer.last_name}</p>
+                            <p class="text-white/60 text-xs">Status: <span class="capitalize">${bid.status}</span></p>
+                        </div>
+                    `).join('');
+                } else {
+                    bidsList.innerHTML = '<p class="text-white/40 text-sm">No bids yet</p>';
+                }
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+            } catch (error) {
+                console.error('Error loading item details:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function closeItemModal() {
+            document.getElementById('item-modal').classList.add('hidden');
+            document.getElementById('item-modal').classList.remove('flex');
+            currentItemId = null;
+        }
+
+        async function deleteItem() {
+            if (!currentItemId) return;
+
+            if (!confirm('Are you sure you want to delete this item?')) return;
+
+            try {
+                const { error } = await supabase
+                    .from('items')
+                    .delete()
+                    .eq('id', currentItemId);
+
+                if (error) throw error;
+
+                closeItemModal();
+                loadMyItems();
+                alert('Item deleted successfully');
+
+            } catch (error) {
+                console.error('Error deleting item:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function getConditionClass(condition) {
+            const classes = {
+                'new': 'item-value-new',
+                'like_new': 'item-value-like_new',
+                'good': 'item-value-good',
+                'fair': 'item-value-fair',
+                'poor': 'item-value-poor'
+            };
+            return classes[condition] || 'bg-white/10 text-white';
+        }
+
+        function getConditionText(condition) {
+            const texts = {
+                'new': 'New',
+                'like_new': 'Like New',
+                'good': 'Good',
+                'fair': 'Fair',
+                'poor': 'Poor'
+            };
+            return texts[condition] || condition;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('bora_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
+
+
+################################################################################
+FILE: .\notification.html
+################################################################################
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+<meta name="supabase-url" content="<?php echo getenv('SUPABASE_URL'); ?>">
+<meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+<meta name="cloudinary-cloud-name" content="<?php echo getenv('CLOUDINARY_CLOUD_NAME'); ?>">
+<meta name="cloudinary-upload-preset" content="<?php echo getenv('CLOUDINARY_UPLOAD_PRESET'); ?>">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | Notifications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/browse.css">
+</head>
+<body class="bg-gradient-to-br from-[#FFD700] to-[#8A2BE2] min-h-screen">
+
+    <!-- Enhanced Header -->
+    <header class="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <a href="browse.html" class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-white font-bold text-xl">B</span>
+                        </div>
+                        <h1 class="text-white text-2xl font-bold tracking-tight">BARTER BORA</h1>
+                    </a>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <span id="user-greeting" class="text-white/90 font-medium hidden md:block text-lg"></span>
+
+                    <div class="relative group">
+                        <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-transform group-hover:scale-105">
+                            <span class="text-white font-bold text-sm">U</span>
+                        </div>
+                        <div class="absolute hidden group-hover:block right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-2 z-50">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Profile</a>
+                            <a href="my-items.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">My Items</a>
+                            <a href="browse.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Browse</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Settings</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-red-600 hover:bg-red-50/50 transition">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="relative py-20">
+        <div class="container mx-auto px-6 max-w-2xl">
+            <div class="mb-8">
+                <h2 class="text-4xl font-bold text-white mb-2">Notifications</h2>
+                <p class="text-white/70">Stay updated on your swap proposals and trades</p>
+            </div>
+
+            <!-- Notifications List -->
+            <div id="notifications-container" class="space-y-4">
+                <div class="text-center py-20">
+                    <div class="loading mx-auto mb-4"></div>
+                    <p class="text-white/60">Loading notifications...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bid Detail Modal -->
+    <div id="bid-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+        <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-2xl border-2 border-white/10 shadow-2xl">
+            <div class="flex justify-between items-start mb-8">
+                <h3 class="text-2xl font-bold text-white">Swap Details</h3>
+                <button onclick="closeBidModal()" class="text-white/60 hover:text-white transition p-2 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div id="bid-modal-content" class="space-y-6">
+                <!-- Content populated by JS -->
+            </div>
+
+            <div id="bid-modal-actions" class="flex gap-4 mt-8">
+                <!-- Actions populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        let authToken = localStorage.getItem('bora_token');
+        let currentUser = JSON.parse(localStorage.getItem('user_data') || '{}');
+        let supabase;
+
+        const SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || 'https://ywbaqtegpjiwsarbkszr.supabase.co';
+        const SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YmFxdGVncGppd3NhcmJrc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE0MjE1MTksImV4cCI6MjAzNjk5NzUxOX0.2BP9dUJ1g2sGp0N7QzLmQkLm2X2X2X2X2X2X2X2X2X';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authToken) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            if (window.supabase && window.supabase.createClient) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+
+            if (document.getElementById('user-greeting') && currentUser.username) {
+                document.getElementById('user-greeting').textContent = `Welcome, ${currentUser.username}`;
+            }
+
+            loadNotifications();
+        });
+
+        async function loadNotifications() {
+            const container = document.getElementById('notifications-container');
+
+            try {
+                const { data: notifications, error } = await supabase
+                    .from('notifications')
+                    .select('*, bids(*)')
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!notifications || notifications.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-20">
+                            <div class="text-white/40 text-6xl mb-4">🔔</div>
+                            <h3 class="text-white text-xl mb-2">No notifications</h3>
+                            <p class="text-white/60">You're all caught up!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = notifications.map(notif => `
+                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition cursor-pointer" onclick="showBidDetails('${notif.bid_id}')">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    ${notif.type === 'bid_received' ? '<i class="fas fa-gift text-[#FFD700]"></i>' : ''}
+                                    ${notif.type === 'bid_accepted' ? '<i class="fas fa-check-circle text-green-400"></i>' : ''}
+                                    ${notif.type === 'bid_rejected' ? '<i class="fas fa-times-circle text-red-400"></i>' : ''}
+                                    <h4 class="text-white font-semibold">${notif.type === 'bid_received' ? 'New Swap Proposal' : notif.type === 'bid_accepted' ? 'Swap Accepted!' : 'Swap Declined'}</h4>
+                                </div>
+                                <p class="text-white/70 text-sm">${notif.title}</p>
+                                <p class="text-white/40 text-xs mt-2">${formatDate(notif.created_at)}</p>
+                            </div>
+                            ${!notif.read ? '<span class="w-3 h-3 bg-[#FFD700] rounded-full"></span>' : ''}
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+                container.innerHTML = `
+                    <div class="text-center py-20">
+                        <div class="text-white/40 text-6xl mb-4">⚠️</div>
+                        <h3 class="text-white text-xl mb-2">Error loading notifications</h3>
+                        <p class="text-white/60">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function showBidDetails(bidId) {
+            const modal = document.getElementById('bid-modal');
+            const content = document.getElementById('bid-modal-content');
+            const actions = document.getElementById('bid-modal-actions');
+
+            try {
+                const { data: bid, error } = await supabase
+                    .from('bids')
+                    .select(`
+                        *,
+                        proposer:proposer_id (first_name, last_name, username, phone_number),
+                        target_owner:target_owner_id (first_name, last_name, username, phone_number),
+                        proposer_item:proposer_item_id (title, condition, imageurl),
+                        target_item:target_item_id (title, condition, imageurl)
+                    `)
+                    .eq('id', bidId)
+                    .maybeSingle();
+
+                if (error) throw error;
+                if (!bid) throw new Error('Bid not found');
+
+                content.innerHTML = `
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-white/60 text-sm mb-2">Their Offer</p>
+                            <div class="bg-white/5 rounded-xl p-4">
+                                <img src="${bid.proposer_item.imageurl || 'https://via.placeholder.com/200'}" alt="" class="w-full h-32 rounded-lg object-cover mb-3">
+                                <h4 class="text-white font-semibold">${bid.proposer_item.title}</h4>
+                                <p class="text-white/60 text-sm">${bid.proposer_item.condition}</p>
+                                <p class="text-white/60 text-sm mt-2">From: ${bid.proposer.first_name} ${bid.proposer.last_name}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-white/60 text-sm mb-2">Your Item</p>
+                            <div class="bg-white/5 rounded-xl p-4">
+                                <img src="${bid.target_item.imageurl || 'https://via.placeholder.com/200'}" alt="" class="w-full h-32 rounded-lg object-cover mb-3">
+                                <h4 class="text-white font-semibold">${bid.target_item.title}</h4>
+                                <p class="text-white/60 text-sm">${bid.target_item.condition}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <p class="text-white/60 text-sm mb-2">Status</p>
+                        <p class="text-white font-semibold capitalize">${bid.status}</p>
+                    </div>
+                `;
+
+                if (bid.status === 'pending' && bid.target_owner_id === currentUser.id) {
+                    actions.innerHTML = `
+                        <button onclick="handleBidAction('${bid.id}', 'accepted')" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold transition">
+                            Accept Swap
+                        </button>
+                        <button onclick="handleBidAction('${bid.id}', 'rejected')" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold transition">
+                            Decline
+                        </button>
+                    `;
+                } else {
+                    actions.innerHTML = `<button onclick="closeBidModal()" class="flex-1 bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-xl font-semibold transition">Close</button>`;
+                }
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+            } catch (error) {
+                console.error('Error loading bid details:', error);
+                alert('Error loading bid details: ' + error.message);
+            }
+        }
+
+        async function handleBidAction(bidId, action) {
+            try {
+                const { error } = await supabase
+                    .from('bids')
+                    .update({ status: action, updated_at: new Date().toISOString() })
+                    .eq('id', bidId);
+
+                if (error) throw error;
+
+                if (action === 'accepted') {
+                    // Create transaction when bid is accepted
+                    const { data: bid } = await supabase
+                        .from('bids')
+                        .select('*')
+                        .eq('id', bidId)
+                        .single();
+
+                    const transactionData = {
+                        bid_id: bidId,
+                        user1_id: bid.proposer_id,
+                        user1_item_id: bid.proposer_item_id,
+                        user2_id: bid.target_owner_id,
+                        user2_item_id: bid.target_item_id
+                    };
+
+                    await supabase.from('transactions').insert([transactionData]);
+
+                    // Update both items to unavailable
+                    await supabase.from('items').update({ status: 'unavailable' }).eq('id', bid.proposer_item_id);
+                    await supabase.from('items').update({ status: 'unavailable' }).eq('id', bid.target_item_id);
+                }
+
+                closeBidModal();
+                loadNotifications();
+                alert(`Bid ${action} successfully!`);
+
+            } catch (error) {
+                console.error('Error updating bid:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function closeBidModal() {
+            document.getElementById('bid-modal').classList.add('hidden');
+            document.getElementById('bid-modal').classList.remove('flex');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('bora_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
+
+
+################################################################################
+FILE: .\profile.html
+################################################################################
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+<meta name="supabase-url" content="<?php echo getenv('SUPABASE_URL'); ?>">
+<meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+<meta name="cloudinary-cloud-name" content="<?php echo getenv('CLOUDINARY_CLOUD_NAME'); ?>">
+<meta name="cloudinary-upload-preset" content="<?php echo getenv('CLOUDINARY_UPLOAD_PRESET'); ?>">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | My Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/browse.css">
+</head>
+<body class="bg-gradient-to-br from-[#FFD700] to-[#8A2BE2] min-h-screen">
+
+    <!-- Enhanced Header -->
+    <header class="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <a href="browse.html" class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-white font-bold text-xl">B</span>
+                        </div>
+                        <h1 class="text-white text-2xl font-bold tracking-tight">BARTER BORA</h1>
+                    </a>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <a href="browse.html" class="text-white/90 font-medium hover:text-white transition">Back to Browse</a>
+                    <div class="relative group">
+                        <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-transform group-hover:scale-105">
+                            <span class="text-white font-bold text-sm">U</span>
+                        </div>
+                        <div class="absolute hidden group-hover:block right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-2 z-50">
+                            <a href="notifications.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Notifications</a>
+                            <a href="my-items.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">My Items</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-red-600 hover:bg-red-50/50 transition">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="relative py-20">
+        <div class="container mx-auto px-6 max-w-2xl">
+            <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 mb-8">
+                <div class="flex items-center space-x-6 mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center shadow-lg">
+                        <span class="text-white font-bold text-4xl">U</span>
+                    </div>
+                    <div>
+                        <h2 id="profile-name" class="text-3xl font-bold text-white mb-2"></h2>
+                        <p id="profile-username" class="text-white/70">@username</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 bg-white/5 rounded-2xl p-6">
+                    <div>
+                        <p class="text-white/60 text-sm mb-1">Email</p>
+                        <p id="profile-email" class="text-white font-medium"></p>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm mb-1">Phone Number</p>
+                        <p id="profile-phone" class="text-white font-medium">Not provided</p>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm mb-1">Location</p>
+                        <p id="profile-location" class="text-white font-medium">Not provided</p>
+                    </div>
+                    <div>
+                        <p class="text-white/60 text-sm mb-1">Member Since</p>
+                        <p id="profile-date" class="text-white font-medium"></p>
+                    </div>
+                </div>
+
+                <button onclick="toggleEditMode()" class="mt-6 w-full bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-3 px-6 rounded-2xl font-semibold hover:opacity-90 transition">
+                    Edit Profile
+                </button>
+            </div>
+
+            <!-- Edit Form (Hidden by default) -->
+            <div id="edit-form" class="hidden bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8">
+                <h3 class="text-2xl font-bold text-white mb-6">Edit Profile</h3>
+                <form onsubmit="handleProfileUpdate(event)" class="space-y-4">
+                    <div>
+                        <label class="text-white/80 text-sm mb-2 block">Phone Number</label>
+                        <input type="tel" id="edit-phone" class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-3 px-4 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all" placeholder="Your phone number">
+                    </div>
+                    <div>
+                        <label class="text-white/80 text-sm mb-2 block">Location</label>
+                        <input type="text" id="edit-location" class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-3 px-4 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all" placeholder="Your location">
+                    </div>
+                    <div class="flex gap-4">
+                        <button type="button" onclick="toggleEditMode()" class="flex-1 bg-white/10 text-white py-3 px-4 rounded-2xl font-semibold hover:bg-white/20 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" class="flex-1 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-3 px-4 rounded-2xl font-semibold hover:opacity-90 transition">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        let authToken = localStorage.getItem('bora_token');
+        let currentUser = JSON.parse(localStorage.getItem('user_data') || '{}');
+        let supabase;
+
+        const SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || 'https://ywbaqtegpjiwsarbkszr.supabase.co';
+        const SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YmFxdGVncGppd3NhcmJrc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE0MjE1MTksImV4cCI6MjAzNjk5NzUxOX0.2BP9dUJ1g2sGp0N7QzLmQkLm2X2X2X2X2X2X2X2X2X';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authToken) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            if (window.supabase && window.supabase.createClient) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+
+            loadProfile();
+        });
+
+        async function loadProfile() {
+            try {
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .maybeSingle();
+
+                if (error) throw error;
+
+                document.getElementById('profile-name').textContent = `${profile.first_name} ${profile.last_name}`;
+                document.getElementById('profile-username').textContent = `@${profile.username}`;
+                document.getElementById('profile-email').textContent = profile.email;
+                document.getElementById('profile-phone').textContent = profile.phone_number || 'Not provided';
+                document.getElementById('profile-location').textContent = profile.location || 'Not provided';
+                document.getElementById('profile-date').textContent = formatDate(profile.created_at);
+
+                document.getElementById('edit-phone').value = profile.phone_number || '';
+                document.getElementById('edit-location').value = profile.location || '';
+
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                alert('Error loading profile: ' + error.message);
+            }
+        }
+
+        function toggleEditMode() {
+            const editForm = document.getElementById('edit-form');
+            editForm.classList.toggle('hidden');
+        }
+
+        async function handleProfileUpdate(event) {
+            event.preventDefault();
+
+            try {
+                const { error } = await supabase
+                    .from('profiles')
+                    .update({
+                        phone_number: document.getElementById('edit-phone').value || null,
+                        location: document.getElementById('edit-location').value || null
+                    })
+                    .eq('id', currentUser.id);
+
+                if (error) throw error;
+
+                alert('Profile updated successfully!');
+                toggleEditMode();
+                loadProfile();
+
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('bora_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
+
+
+################################################################################
+FILE: .\api\bids.php
+################################################################################
+
+<?php
+require_once '../config/supabase.php';
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Authorization, Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+$headers = apache_request_headers();
+$authToken = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : '';
+
+if (empty($authToken)) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Authentication required']);
+    exit();
+}
+
+try {
+    $supabase = get_supabase();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // Get bids for user
+        $result = $supabase->query('bids', 'GET', null, [
+            'select' => '*',
+            'order' => 'created_at.desc'
+        ]);
+
+        if ($result['status'] === 200) {
+            echo json_encode($result['data']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to fetch bids']);
+        }
+
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!$input) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid JSON data']);
+            exit();
+        }
+
+        $required = ['proposer_id', 'proposer_item_id', 'target_item_id', 'target_owner_id'];
+        foreach ($required as $field) {
+            if (empty($input[$field])) {
+                http_response_code(400);
+                echo json_encode(['error' => "Missing required field: $field"]);
+                exit();
+            }
+        }
+
+        $bid_data = [
+            'proposer_id' => $input['proposer_id'],
+            'proposer_item_id' => $input['proposer_item_id'],
+            'target_item_id' => $input['target_item_id'],
+            'target_owner_id' => $input['target_owner_id'],
+            'status' => 'pending'
+        ];
+
+        $result = $supabase->query('bids', 'POST', $bid_data);
+
+        if ($result['status'] >= 200 && $result['status'] < 300) {
+            echo json_encode(['success' => true, 'bid' => $result['data'][0]]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to create bid']);
+        }
+
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!$input || empty($input['id']) || empty($input['status'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Missing id or status']);
+            exit();
+        }
+
+        $bid_id = $input['id'];
+        $new_status = $input['status'];
+
+        if (!in_array($new_status, ['pending', 'accepted', 'rejected', 'cancelled'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid status']);
+            exit();
+        }
+
+        $update_data = [
+            'status' => $new_status,
+            'updated_at' => date('c')
+        ];
+
+        $result = $supabase->query('bids', 'PATCH', $update_data, ['id' => 'eq.' . $bid_id]);
+
+        if ($result['status'] >= 200 && $result['status'] < 300) {
+            echo json_encode(['success' => true, 'bid' => $result['data'][0]]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to update bid']);
+        }
+    }
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
+}
+?>
+
+
+################################################################################
+FILE: .\api\debug-supabase.php
+################################################################################
+
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+header('Content-Type: application/json');
+
+// Your actual credentials from config
+$supabase_url = 'https://ywbaqtegpjiwsarbkszr.supabase.co';
+$supabase_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YmFxdGVncGppd3NhcmJrc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE0MjE1MTksImV4cCI6MjAzNjk5NzUxOX0.2BP9dUJ1g2sGp0N7QzLmQkLm2X2X2X2X2X2X2X2X2X';
+
+// Test CURL connection
+$test_url = $supabase_url . '/rest/v1/profiles?limit=1';
+$headers = [
+    'apikey: ' . $supabase_key,
+    'Authorization: Bearer ' . $supabase_key,
+];
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $test_url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+curl_setopt($ch, CURLOPT_FAILONERROR, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Disable SSL verify for testing
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($ch, CURLOPT_VERBOSE, true); // Get detailed info
+
+$response = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$error = curl_error($ch);
+$info = curl_getinfo($ch);
+curl_close($ch);
+
+echo json_encode([
+    'test_url' => $test_url,
+    'http_code' => $http_code,
+    'error' => $error,
+    'response' => $response,
+    'curl_info' => $info
+], JSON_PRETTY_PRINT);
+?>
+
+
+################################################################################
+FILE: .\api\forgort-password.php
+################################################################################
+
+<?php
+require_once '../config/supabase.php';
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    exit(0);
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+$input = json_decode(file_get_contents('php://input'), true);
+
+if (!$input || empty($input['email'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Email is required']);
+    exit;
+}
+
+$email = $input['email'];
+
+// Validate email format
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Please enter a valid email address']);
+    exit;
+}
+
+$supabase = get_supabase();
+
+// Check if email exists in database
+$result = $supabase->query('profiles', 'GET', null, ['email' => 'eq.' . $email]);
+
+if ($result['status'] !== 200) {
+    // Don't reveal whether email exists or not for security
+    echo json_encode(['message' => 'If this email is registered, you will receive a password reset link shortly.']);
+    exit;
+}
+
+if (empty($result['data'])) {
+    // Email doesn't exist, but return generic message for security
+    echo json_encode(['message' => 'If this email is registered, you will receive a password reset link shortly.']);
+    exit;
+}
+
+$user = $result['data'][0];
+
+// Generate reset token (in a real app, you'd use a proper token generation method)
+$reset_token = bin2hex(random_bytes(32));
+$expires_at = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+// Store reset token in database (you might want a separate table for this)
+try {
+    $update_data = [
+        'reset_token' => $reset_token,
+        'reset_token_expires' => $expires_at
+    ];
+    
+    $update_result = $supabase->query('profiles', 'PATCH', $update_data, ['id' => 'eq.' . $user['id']]);
+    
+    if ($update_result['status'] >= 200 && $update_result['status'] < 300) {
+        // In a real application, you would:
+        // 1. Send an email with the reset link
+        // 2. Use a proper email service
+        // 3. Include a secure reset link
+        
+        // For now, we'll just return success message
+        error_log("Password reset token for {$email}: {$reset_token}"); // Log for development
+        
+        echo json_encode(['message' => 'If this email is registered, you will receive a password reset link shortly.']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to process reset request']);
+    }
+    
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Server error processing request']);
+}
+
+?>
+
+
+################################################################################
+FILE: .\api\items.php
+################################################################################
+
+<?php
+require_once '../config/supabase.php';
+
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Authorization, Content-Type');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Simple token check
+$headers = apache_request_headers();
+$authToken = isset($headers['Authorization']) ? str_replace('Bearer ', '', $headers['Authorization']) : '';
+
+if (empty($authToken)) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Authentication required']);
+    exit();
+}
+
+try {
+    $supabase = get_supabase();
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // Get all items with owner information
+        $result = $supabase->query('items', 'GET', null, [
+            'select' => '*',
+            'order' => 'created_at.desc'
+        ]);
+        
+        if ($result['status'] === 200) {
+            echo json_encode($result['data']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to fetch items from database']);
+        }
+        
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Get JSON input
+        $input = json_decode(file_get_contents('php://input'), true);
+        
+        if (!$input) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid JSON data']);
+            exit();
+        }
+        
+        // Validate required fields
+        $required = ['title', 'description', 'condition', 'ownerid'];
+        foreach ($required as $field) {
+            if (empty($input[$field])) {
+                http_response_code(400);
+                echo json_encode(['error' => "Missing required field: $field"]);
+                exit();
+            }
+        }
+        
+        // Prepare item data according to your schema
+        $item_data = [
+            'title' => $input['title'],
+            'description' => $input['description'],
+            'condition' => $input['condition'],
+            'ownerid' => $input['ownerid'],
+            'imageurl' => $input['imageurl'] ?? null,
+            'status' => $input['status'] ?? 'available', // Default status
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        
+        // Insert into database
+        $result = $supabase->query('items', 'POST', $item_data);
+        
+        if ($result['status'] >= 200 && $result['status'] < 300) {
+            echo json_encode(['success' => true, 'item' => $result['data'][0]]);
+        } else {
+            error_log('Supabase error: ' . json_encode($result));
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to create item in database']);
+        }
+    }
+    
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
+}
+?>
+
+
+################################################################################
+FILE: .\api\login.php
+################################################################################
+
+<?php
+require_once '../config/supabase.php';
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    exit(0);
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+$input = json_decode(file_get_contents('php://input'), true);
+
+if (!$input) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid JSON data']);
+    exit;
+}
+
+if (empty($input['email']) || empty($input['password'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Email and password are required']);
+    exit;
+}
+
+$supabase = get_supabase();
+
+$result = $supabase->query('profiles', 'GET', null, ['email' => 'eq.' . $input['email']]);
+
+if ($result['status'] !== 200 || empty($result['data'])) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid email or password']);
+    exit;
+}
+
+$user = $result['data'][0];
+
+if (!verify_password($input['password'], $user['password_hash'])) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid email or password']);
+    exit;
+}
+
+$token = bin2hex(random_bytes(32));
+
+echo json_encode([
+    'access_token' => $token,
+    'token_type' => 'bearer',
+    'user' => [
+        'id' => $user['id'],
+        'email' => $user['email'],
+        'username' => $user['username'],
+        'first_name' => $user['first_name'],
+        'last_name' => $user['last_name'],
+        'phone_number' => $user['phone_number'] ?? null,
+        'location' => $user['location'] ?? null
+    ]
+]);
+?>
+
+
+################################################################################
+FILE: .\api\signup.php
+################################################################################
+
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+    header("Access-Control-Max-Age: 3600");
+    exit(0);
+}
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+error_log("Signup request received: " . date('Y-m-d H:i:s'));
+
+try {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new Exception('Method not allowed', 405);
+    }
+
+    $config_path = '../config/supabase.php';
+    if (!file_exists($config_path)) {
+        throw new Exception('Server configuration error: Config file not found', 500);
+    }
+
+    require_once $config_path;
+
+    $json_input = file_get_contents('php://input');
+    if (empty($json_input)) {
+        throw new Exception('No data received', 400);
+    }
+
+    $input = json_decode($json_input, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception('Invalid JSON data: ' . json_last_error_msg(), 400);
+    }
+
+    $required = ['email', 'password', 'username', 'first_name', 'last_name'];
+    $missing_fields = [];
+    foreach ($required as $field) {
+        if (empty($input[$field])) {
+            $missing_fields[] = $field;
+        }
+    }
+
+    if (!empty($missing_fields)) {
+        throw new Exception('Missing required fields: ' . implode(', ', $missing_fields), 400);
+    }
+
+    if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+        throw new Exception('Invalid email format', 400);
+    }
+
+    if (strlen($input['password']) < 8) {
+        throw new Exception('Password must be at least 8 characters long', 400);
+    }
+
+    $supabase = get_supabase();
+    if (!$supabase) {
+        throw new Exception('Database connection failed', 500);
+    }
+
+    $check_email = $supabase->query('profiles', 'GET', null, ['email' => 'eq.' . $input['email']]);
+    if ($check_email['status'] !== 200) {
+        error_log("Email check failed with status: " . $check_email['status']);
+        throw new Exception('Database error during email validation', 500);
+    }
+
+    if (!empty($check_email['data'])) {
+        throw new Exception('This email is already registered.', 400);
+    }
+
+    $check_username = $supabase->query('profiles', 'GET', null, ['username' => 'eq.' . $input['username']]);
+    if ($check_username['status'] !== 200) {
+        error_log("Username check failed with status: " . $check_username['status']);
+        throw new Exception('Database error during username validation', 500);
+    }
+
+    if (!empty($check_username['data'])) {
+        throw new Exception('That username is already taken.', 400);
+    }
+
+    $safe_password = substr($input['password'], 0, 72);
+    $password_hash = password_hash($safe_password, PASSWORD_BCRYPT);
+
+    if ($password_hash === false) {
+        throw new Exception('Password hashing failed', 500);
+    }
+
+    $user_data = [
+        'email' => $input['email'],
+        'username' => $input['username'],
+        'first_name' => $input['first_name'],
+        'last_name' => $input['last_name'],
+        'password_hash' => $password_hash
+    ];
+
+    if (!empty($input['phone_number'])) {
+        $user_data['phone_number'] = $input['phone_number'];
+    }
+    if (!empty($input['location'])) {
+        $user_data['location'] = $input['location'];
+    }
+
+    $result = $supabase->query('profiles', 'POST', $user_data);
+
+    error_log("Supabase insert response status: " . $result['status']);
+
+    if ($result['status'] >= 200 && $result['status'] < 300) {
+        http_response_code(201);
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Account created successfully! You can now login.',
+            'data' => $result['data'][0] ?? null
+        ]);
+    } else {
+        $error_msg = 'Failed to create account.';
+        $supabase_error = '';
+
+        if (!empty($result['data'][0]['message'])) {
+            $supabase_error = $result['data'][0]['message'];
+        } elseif (!empty($result['data']['message'])) {
+            $supabase_error = $result['data']['message'];
+        } elseif (!empty($result['data']['error'])) {
+            $supabase_error = $result['data']['error'];
+        }
+
+        if ($supabase_error) {
+            $error_msg .= ' Error: ' . $supabase_error;
+        }
+
+        throw new Exception($error_msg, 500);
+    }
+
+} catch (Exception $e) {
+    $code = $e->getCode() >= 400 ? $e->getCode() : 500;
+    http_response_code($code);
+
+    error_log("Signup error [" . $code . "]: " . $e->getMessage());
+
+    echo json_encode([
+        'error' => $e->getMessage(),
+        'code' => $code
+    ]);
+}
+?>
+
+
+################################################################################
+FILE: .\api\test-connection.php
+################################################################################
+
+<?php
+require_once '../config/supabase.php';
+header('Content-Type: application/json');
+
+$result = test_supabase_connection();
+echo json_encode($result, JSON_PRETTY_PRINT);
+?>
+
+
+################################################################################
+FILE: .\config\supabase.php
+################################################################################
+
+<?php
+function load_env($path) {
+    if (!file_exists($path)) {
+        error_log("Env file not found: " . $path);
+        return;
+    }
+
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue;
+
+        $parts = explode('=', $line, 2);
+        if (count($parts) < 2) continue;
+
+        list($name, $value) = $parts;
+        $name = trim($name);
+        $value = trim($value);
+
+        if (preg_match('/^([\'"])(.*)\1$/', $value, $matches)) {
+            $value = $matches[2];
+        }
+
+        putenv($name . "=" . $value);
+        $_ENV[$name] = $value;
+        $_SERVER[$name] = $value;
+    }
+}
+
+// Load environment variables
+load_env(__DIR__ . '/../.env');
+
+class SupabaseClient {
+    private $supabase_url;
+    private $supabase_key;
+
+    public function __construct() {
+        $this->supabase_url = getenv('SUPABASE_URL');
+        $this->supabase_key = getenv('SUPABASE_ANON_KEY');
+
+        if (!$this->supabase_url || !$this->supabase_key) {
+            error_log("CRITICAL: Missing Supabase Credentials");
+            throw new Exception("Missing Supabase credentials. Please check your .env file.");
+        }
+
+        $this->supabase_url = rtrim($this->supabase_url, '/');
+    }
+
+    public function query($table, $method = 'GET', $data = null, $filters = []) {
+        $url = $this->supabase_url . '/rest/v1/' . $table;
+
+        if ($method === 'GET' && !empty($filters)) {
+            $queryParams = [];
+            foreach ($filters as $key => $value) {
+                $queryParams[] = $key . '=' . urlencode($value);
+            }
+            $url .= '?' . implode('&', $queryParams);
+        }
+
+        $headers = [
+            'apikey: ' . $this->supabase_key,
+            'Authorization: Bearer ' . $this->supabase_key,
+            'Content-Type: application/json',
+            'Prefer: return=representation'
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_FAILONERROR, false);
+
+        if (getenv('APP_ENV') === 'production') {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        } else {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        }
+
+        if ($method === 'POST') {
+            curl_setopt($ch, CURLOPT_POST, true);
+            if ($data) {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            }
+        } elseif (in_array($method, ['PATCH', 'DELETE', 'PUT'])) {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+            if ($data) {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            }
+        }
+
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+
+        curl_close($ch);
+
+        if ($error) {
+            return [
+                'data' => ['error' => $error],
+                'status' => 0
+            ];
+        }
+
+        $response_data = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log("JSON decode error: " . json_last_error_msg());
+            return [
+                'data' => ['error' => 'Invalid JSON response'],
+                'status' => $http_code
+            ];
+        }
+
+        return [
+            'data' => $response_data,
+            'status' => $http_code
+        ];
+    }
+}
+
+function get_supabase() {
+    static $supabase = null;
+    if ($supabase === null) {
+        try {
+            $supabase = new SupabaseClient();
+        } catch (Exception $e) {
+            error_log("Failed to create Supabase client: " . $e->getMessage());
+            return null;
+        }
+    }
+    return $supabase;
+}
+
+function hash_password($password) {
+    if (strlen($password) > 72) {
+        $password = substr($password, 0, 72);
+    }
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    if ($hash === false) {
+        throw new Exception("Password hashing failed");
+    }
+    return $hash;
+}
+
+function verify_password($plain_password, $hashed_password) {
+    if (strlen($plain_password) > 72) {
+        $plain_password = substr($plain_password, 0, 72);
+    }
+    return password_verify($plain_password, $hashed_password);
+}
+
+function test_supabase_connection() {
+    $supabase = get_supabase();
+    if (!$supabase) {
+        return ['status' => 'error', 'message' => 'Failed to initialize Supabase client'];
+    }
+
+    $result = $supabase->query('profiles', 'GET', null, ['limit' => '1']);
+
+    return [
+        'status' => $result['status'] === 200 ? 'success' : 'error',
+        'http_code' => $result['status'],
+        'message' => $result['status'] === 200 ? 'Connection successful' : 'Connection failed'
+    ];
+}
+?>
+
+
+################################################################################
+FILE: .\css\auth.css
+################################################################################
+
+:root {
+    --gold: #FFD700;
+    --light-gold: #FFE44D;
+    --purple: #8A2BE2;
+    --dark-purple: #4B0082;
+    --white: #ffffff;
+    --light-gray: #f0f0f0;
+    --dark-gray: #333333;
+    --error-red: #ff4757;
+    --success-green: #2ed573;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--purple) 100%);
+    padding: 20px;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.brand-title {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--gold), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.brand-subtitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.message {
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.message-icon {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.success-message {
+    background-color: rgba(46, 213, 115, 0.2);
+    color: var(--success-green);
+    border: 1px solid rgba(46, 213, 115, 0.3);
+}
+
+.error-message {
+    background-color: rgba(255, 71, 87, 0.2);
+    color: var(--error-red);
+    border: 1px solid rgba(255, 71, 87, 0.3);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.form-container {
+    width: 100%;
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.name-group {
+    display: flex;
+    gap: 12px;
+}
+
+.name-group .form-input {
+    flex: 1;
+}
+
+.form-input {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--light-gold);
+    box-shadow: 0 0 0 3px rgba(255, 228, 77, 0.2);
+}
+
+.form-input.error {
+    border-color: var(--error-red);
+    box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.2);
+}
+
+.requirements {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+.requirement-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.requirement {
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.req-icon {
+    margin-right: 8px;
+    font-size: 0.6rem;
+}
+
+.requirement.valid {
+    color: var(--success-green);
+}
+
+.requirement.valid .req-icon::before {
+    content: "✓";
+}
+
+.auth-button {
+    background: linear-gradient(to right, var(--gold), var(--purple));
+    color: var(--white);
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.auth-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.auth-button:active {
+    transform: translateY(0);
+}
+
+.form-footer {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.auth-link {
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    margin-bottom: 8px;
+}
+
+.auth-link span {
+    color: var(--light-gold);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.auth-link:hover {
+    color: var(--white);
+}
+
+.auth-footer {
+    margin-top: 30px;
+    font-size: 10px;
+    opacity: 0.3;
+    letter-spacing: 1px;
+    text-align: center;
+    color: var(--white);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-container {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.5s ease;
+}
+
+@media (max-width: 640px) {
+    .auth-card {
+        padding: 24px;
+    }
+
+    .brand-title {
+        font-size: 2.5rem;
+    }
+
+    .name-group {
+        flex-direction: column;
+        gap: 16px;
+    }
+}
+
+
+################################################################################
+FILE: .\css\browse.css
+################################################################################
+
+:root {
+    --gold: #FFD700;
+    --light-gold: #FFE44D;
+    --purple: #8A2BE2;
+    --dark-purple: #4B0082;
+    --dark: #1a1b25;
+    --light: #f8f9fa;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--gold), var(--purple));
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, var(--light-gold), var(--dark-purple));
+    background-clip: padding-box;
+}
+
+.item-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.item-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 24px;
+}
+
+.item-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.item-card:hover::before {
+    opacity: 1;
+}
+
+.item-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    background: linear-gradient(45deg, #2d3047, #1a1b25);
+    position: relative;
+    overflow: hidden;
+}
+
+.item-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+.item-value-new {
+    background: linear-gradient(135deg, var(--gold), var(--light-gold));
+    color: #000;
+}
+
+.item-value-like_new {
+    background: linear-gradient(135deg, #a8ff78, #78ffd6);
+    color: #000;
+}
+
+.item-value-good {
+    background: linear-gradient(135deg, #ff9966, #ff5e62);
+    color: #fff;
+}
+
+.item-value-fair {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: #fff;
+}
+
+.item-value-poor {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #fff;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#detail-modal, #create-modal {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.item-card {
+    animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.loading {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--gold);
+    animation: spin 1s ease-in-out infinite;
+}
+
+.loading-small {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#notification {
+    animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    .item-card {
+        border-radius: 20px;
+    }
+
+    .item-image {
+        height: 200px;
+    }
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--gold), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hover-lift {
+    transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+}
+
+.focus-gold:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+#my-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px;
+}
+
+.swap-selection-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 12px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    position: relative;
+}
+
+.swap-selection-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+}
+
+.swap-selection-card.selected {
+    background: rgba(255, 215, 0, 0.05);
+    border-color: #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.swap-selection-card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.swap-card-info {
+    flex: 1;
+}
+
+.swap-card-title {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+}
+
+.swap-card-condition {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.swap-selection-card .radio-indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    margin-left: 10px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.swap-selection-card.selected .radio-indicator {
+    border-color: #FFD700;
+    background: #FFD700;
+}
+
+.swap-selection-card.selected .radio-indicator::after {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 10px;
+    color: #1a1b25;
+}
+
+/* Floating Action Button */
+.fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(to right, #FFD700, #8A2BE2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 20px rgba(139, 69, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 40;
+}
+
+.fab:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 25px rgba(139, 69, 255, 0.6);
+}
+
+/* User dropdown styles */
+#user-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 0.5rem;
+    width: 12rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 0.75rem;
+    padding: 0.5rem 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    z-index: 50;
+}
+
+#user-dropdown a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #374151;
+    transition: all 0.2s;
+}
+
+#user-dropdown a:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Swap selection styles */
+.swap-selection-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.swap-selection-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.swap-selection-card.selected {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.swap-card-info {
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.swap-card-title {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.swap-card-condition {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.radio-indicator {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    position: relative;
+}
+
+.swap-selection-card.selected .radio-indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.75rem;
+    height: 0.75rem;
+    background: #FFD700;
+    border-radius: 50%;
+}
+.item-value-new { background: linear-gradient(135deg, #FFD700, #FFE44D); color: #000; }
+.item-value-like_new { background: linear-gradient(135deg, #a8ff78, #78ffd6); color: #000; }
+.item-value-good { background: linear-gradient(135deg, #ff9966, #ff5e62); color: #fff; }
+.item-value-fair { background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: #fff; }
+.item-value-poor { background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff; }
+
+
+################################################################################
+FILE: .\css\index.css
+################################################################################
+
+:root {
+    --gold: #FFD700;
+    --light-gold: #FFE44D;
+    --purple: #8A2BE2;
+    --dark-purple: #4B0082;
+    --dark: #1a1b25;
+    --light: #f8f9fa;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to bottom, var(--gold) 0%, var(--purple) 100%);
+    color: var(--light);
+    min-height: 100vh;
+}
+
+.brand-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--gold), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.brand-subtitle {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    padding: 1.25rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.step:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.step-num {
+    background: linear-gradient(135deg, var(--gold), var(--purple));
+    color: white;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-right: 1.25rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.step-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.highlight {
+    color: var(--light-gold);
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button {
+    display: block;
+    background: linear-gradient(to right, var(--gold), var(--purple));
+    color: white;
+    text-align: center;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 2rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.ad-slot {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 1rem 2rem;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.ad-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+.step:nth-child(1) { animation-delay: 0.1s; }
+.step:nth-child(2) { animation-delay: 0.2s; }
+.step:nth-child(3) { animation-delay: 0.3s; }
+
+@media (max-width: 640px) {
+    .brand-title {
+        font-size: 2.5rem;
+    }
+
+    .welcome-card {
+        padding: 1.5rem;
+        width: 95%;
+    }
+
+    .step {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .step-num {
+        margin-bottom: 0.75rem;
+    }
+}
+
+
+################################################################################
+FILE: .\css\style.css
+################################################################################
+
+/* Custom Variables */
+:root {
+    --bora-gold: #D4AF37;
+    --bora-purple-mid: #702963;
+    --bora-purple-dark: #301934;
+    --bora-white-glass: rgba(255, 255, 255, 0.12);
+    --safe-top: env(safe-area-inset-top); /* Handles iPhone Notches */
+}
+
+/* Base Mobile Setup */
+* {
+    -webkit-tap-highlight-color: transparent; /* Removes the ugly blue box when tapping on mobile */
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bora-purple-dark);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden; /* Prevents side-scrolling bugs */
+}
+
+/* The Royal Gradient */
+.welcome-gradient {
+    background: linear-gradient(
+        to bottom, 
+        var(--bora-gold) -20%, /* Pushes the gold higher up for a cleaner fade */
+        var(--bora-purple-mid) 40%, 
+        var(--bora-purple-dark) 90%
+    );
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: calc(var(--safe-top) + 2rem) 1.5rem 2rem 1.5rem;
+}
+
+/* Typography - Adjusted for Mobile Screens */
+.brand-title {
+    font-size: clamp(2.5rem, 10vw, 3.5rem); /* Shrinks/Grows based on screen size */
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.05em;
+    margin: 0;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+}
+
+.brand-subtitle {
+    color: #fef08a;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+/* The Mobile Card (The Mat) */
+.welcome-card {
+    width: 100%;
+    max-width: 400px; /* Forces mobile-width even on Desktop */
+    background: var(--bora-white-glass);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 2.5rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+/* Step Icons/Text */
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.step {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.step-num {
+    color: var(--bora-gold);
+    font-weight: 900;
+    font-size: 1.1rem;
+}
+
+.step-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.highlight {
+    font-weight: 800;
+    color: white;
+}
+
+/* Button - Built for Thumbs */
+.cta-button {
+    width: 100%;
+    background-color: var(--bora-gold);
+    color: var(--bora-purple-dark);
+    font-weight: 900;
+    font-size: 1rem;
+    padding: 1.25rem 0; /* Larger "Tap Target" for thumbs */
+    border-radius: 1.25rem;
+    margin-top: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: none;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: transform 0.1s ease;
+}
+
+/* Mobile Interaction: Button shrinks slightly when pressed */
+.cta-button:active {
+    transform: scale(0.96);
+    background-color: #e5c14f;
+}
+
+/* Ads - Mobile Banner Style */
+.ad-slot {
+    width: 100%;
+    max-width: 400px;
+    height: 60px; /* Standard mobile banner height */
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ad-text {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: rgba(255, 255, 255, 0.3);
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+.animate-shake {
+    animation: shake 0.2s ease-in-out 0s 2;
+}
+.border-red-500 {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+.hidden-form { display: none; }
+
+/* Mobile safe inputs */
+input:focus { outline: 2px solid var(--bora-gold); }
+
+.border-red-500 {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+.animate-shake {
+    animation: shake 0.2s ease-in-out 0s 2;
+}
+
+/* ... include your existing welcome-gradient and card styles here ... */
+/* Custom Bora Scroller */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#feed-container {
+    scroll-behavior: smooth;
+}
+
+.bg-bora-dark {
+    background-color: #0a0a0a;
+}
+
+################################################################################
+FILE: .\js\auth.js
+################################################################################
+
+function showForm(formId) {
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('signup-form').classList.add('hidden');
+    document.getElementById('forgot-form').classList.add('hidden');
+    document.getElementById('error-message').classList.add('hidden');
+    document.getElementById('success-message').classList.add('hidden');
+
+    document.getElementById(`${formId}-form`).classList.remove('hidden');
+    clearErrors();
+}
+
+function displayMessage(type, message, fieldId = null) {
+    const messageDiv = document.getElementById(`${type}-message`);
+    const messageText = messageDiv.querySelector('.message-text');
+    messageText.innerText = message;
+    messageDiv.classList.remove('hidden');
+
+    if (fieldId && type === 'error') {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.classList.add('error');
+            field.parentElement.classList.add('shake');
+            setTimeout(() => field.parentElement.classList.remove('shake'), 500);
+        }
+    }
+}
+
+function clearErrors() {
+    const inputs = document.querySelectorAll('.form-input');
+    inputs.forEach(input => input.classList.remove('error'));
+
+    document.getElementById('error-message').classList.add('hidden');
+    document.getElementById('success-message').classList.add('hidden');
+}
+
+document.addEventListener('input', (e) => {
+    if (e.target.tagName === 'INPUT') {
+        e.target.classList.remove('error');
+        document.getElementById('error-message').classList.add('hidden');
+
+        if (e.target.id === 'reg-password') {
+            validatePasswordRequirements(e.target.value);
+        }
+
+        if (e.target.id === 'reg-confirm-password') {
+            validatePasswordMatch();
+        }
+    }
+});
+
+function validatePasswordRequirements(password) {
+    const hasMinLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+
+    const lengthReq = document.getElementById('req-length');
+    const uppercaseReq = document.getElementById('req-uppercase');
+    const numberReq = document.getElementById('req-number');
+
+    if (lengthReq) lengthReq.classList.toggle('valid', hasMinLength);
+    if (uppercaseReq) uppercaseReq.classList.toggle('valid', hasUppercase);
+    if (numberReq) numberReq.classList.toggle('valid', hasNumber);
+
+    return hasMinLength && hasUppercase && hasNumber;
+}
+
+function validatePasswordMatch() {
+    const password = document.getElementById('reg-password');
+    const confirmPassword = document.getElementById('reg-confirm-password');
+
+    if (!password || !confirmPassword) return false;
+
+    if (confirmPassword.value && password.value !== confirmPassword.value) {
+        confirmPassword.classList.add('error');
+        return false;
+    }
+
+    confirmPassword.classList.remove('error');
+    return true;
+}
+
+function validateSignupForm() {
+    const fname = document.getElementById('reg-fname');
+    const lname = document.getElementById('reg-lname');
+    const username = document.getElementById('reg-username');
+    const email = document.getElementById('reg-email');
+    const phone = document.getElementById('reg-phone');
+    const location = document.getElementById('reg-location');
+    const password = document.getElementById('reg-password');
+    const confirmPassword = document.getElementById('reg-confirm-password');
+
+    if (!fname.value || !lname.value || !username.value || !email.value || !password.value || !confirmPassword.value) {
+        displayMessage('error', 'Please fill in all required fields');
+        return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.value)) {
+        displayMessage('error', 'Please enter a valid email address', 'reg-email');
+        return false;
+    }
+
+    if (!validatePasswordRequirements(password.value)) {
+        displayMessage('error', 'Password does not meet requirements', 'reg-password');
+        return false;
+    }
+
+    if (!validatePasswordMatch()) {
+        displayMessage('error', 'Passwords do not match', 'reg-confirm-password');
+        return false;
+    }
+
+    return true;
+}
+
+function validateLoginForm() {
+    const email = document.getElementById('login-email');
+    const password = document.getElementById('login-password');
+
+    if (!email.value || !password.value) {
+        displayMessage('error', 'Please fill in all fields');
+        return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.value)) {
+        displayMessage('error', 'Please enter a valid email address', 'login-email');
+        return false;
+    }
+
+    return true;
+}
+
+function validateForgotForm() {
+    const email = document.getElementById('forgot-email');
+
+    if (!email.value) {
+        displayMessage('error', 'Please enter your email address');
+        return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.value)) {
+        displayMessage('error', 'Please enter a valid email address', 'forgot-email');
+        return false;
+    }
+
+    return true;
+}
+
+const API_BASE = '/api';
+
+async function handleSignup() {
+    if (!validateSignupForm()) return;
+
+    const data = {
+        first_name: document.getElementById('reg-fname').value,
+        last_name: document.getElementById('reg-lname').value,
+        username: document.getElementById('reg-username').value,
+        email: document.getElementById('reg-email').value,
+        phone_number: document.getElementById('reg-phone').value,
+        location: document.getElementById('reg-location').value,
+        password: document.getElementById('reg-password').value
+    };
+
+    try {
+        const response = await fetch(API_BASE + '/signup.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            displayMessage('success', result.message || 'Account created successfully! You can now login.');
+            document.getElementById('signup-form').querySelectorAll('input').forEach(input => {
+                input.value = '';
+            });
+            setTimeout(() => showForm('login'), 2000);
+        } else {
+            let fieldId = null;
+            if (result.error && result.error.toLowerCase().includes("username")) fieldId = 'reg-username';
+            if (result.error && result.error.toLowerCase().includes("email")) fieldId = 'reg-email';
+            if (result.error && result.error.toLowerCase().includes("phone")) fieldId = 'reg-phone';
+            displayMessage('error', result.error || 'Registration failed', fieldId);
+        }
+    } catch (e) {
+        displayMessage('error', 'Connection error. Please try again later.');
+    }
+}
+
+async function handleLogin() {
+    if (!validateLoginForm()) return;
+
+    const data = {
+        email: document.getElementById('login-email').value,
+        password: document.getElementById('login-password').value
+    };
+
+    try {
+        const response = await fetch(API_BASE + '/login.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            displayMessage('success', 'Login successful! Redirecting...');
+            localStorage.setItem('bora_token', result.access_token);
+            localStorage.setItem('user_data', JSON.stringify(result.user));
+            setTimeout(() => {
+                window.location.href = "browse.html";
+            }, 1500);
+        } else {
+            displayMessage('error', result.error || 'Login failed', 'login-password');
+        }
+    } catch (e) {
+        displayMessage('error', 'API is offline. Please try again later.');
+    }
+}
+
+async function handleForgot() {
+    if (!validateForgotForm()) return;
+
+    const email = document.getElementById('forgot-email').value;
+
+    try {
+        const response = await fetch(API_BASE + '/forgot-password.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            displayMessage('success', result.message || 'If this email is registered, you will receive a password reset link shortly.');
+            document.getElementById('forgot-email').value = '';
+            setTimeout(() => showForm('login'), 3000);
+        } else {
+            const result = await response.json();
+            displayMessage('error', result.error || 'Error sending reset link. Please try again.');
+        }
+    } catch (e) {
+        displayMessage('error', 'Connection error. Please try again later.');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('reg-password');
+    const confirmPasswordInput = document.getElementById('reg-confirm-password');
+
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function(e) {
+            validatePasswordRequirements(e.target.value);
+        });
+    }
+
+    if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+    }
+
+    const forms = document.querySelectorAll('.form-container');
+    forms.forEach(form => {
+        form.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (form.id === 'login-form') {
+                    handleLogin();
+                } else if (form.id === 'signup-form') {
+                    handleSignup();
+                } else if (form.id === 'forgot-form') {
+                    handleForgot();
+                }
+            }
+        });
+    });
+
+    console.log('Auth.js initialized successfully');
+});
+
+
+################################################################################
+FILE: .\js\browse.js
+################################################################################
+
+// API Base URL
+const API_BASE = '/api';
+let authToken = localStorage.getItem('bora_token');
+let currentUser = JSON.parse(localStorage.getItem('user_data') || '{}');
+let allItems = [];
+let currentPage = 1;
+const ITEMS_PER_PAGE = 12;
+let selectedItemForSwap = null;
+let currentDetailItem = null;
+
+// Get environment variables from meta tags
+const SUPABASE_URL = document.querySelector('meta[name="supabase-url"]')?.getAttribute('content') || 'https://ywbaqtegpjiwsarbkszr.supabase.co';
+const SUPABASE_ANON_KEY = document.querySelector('meta[name="supabase-anon-key"]')?.getAttribute('content') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YmFxdGVncGppd3NhcmJrc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE0MjE1MTksImV4cCI6MjAzNjk5NzUxOX0.2BP9dUJ1g2sGp0N7QzLmQkLm2X2X2X2X2X2X2X2X';
+const CLOUDINARY_CLOUD_NAME = document.querySelector('meta[name="cloudinary-cloud-name"]')?.getAttribute('content') || 'de6v367pp';
+const CLOUDINARY_UPLOAD_PRESET = document.querySelector('meta[name="cloudinary-upload-preset"]')?.getAttribute('content') || 'bora_uploads';
+
+// Cloudinary Configuration
+const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+// Initialize Supabase
+let supabase;
+if (typeof createClient !== 'undefined') {
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else if (window.supabase && window.supabase.createClient) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+
+
+
+
+// DOM Elements
+const itemsGrid = document.getElementById('items-grid');
+const createModal = document.getElementById('create-modal');
+const detailModal = document.getElementById('detail-modal');
+const createBtn = document.getElementById('create-item-btn');
+const closeCreateModal = document.getElementById('close-create-modal');
+const closeDetailModal = document.getElementById('close-detail-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const createItemForm = document.getElementById('create-item-form');
+const userGreeting = document.getElementById('user-greeting');
+const itemsCount = document.getElementById('items-count');
+const loadMoreContainer = document.getElementById('load-more-container');
+const searchInput = document.querySelector('input[type="text"]');
+const categoryFilter = document.querySelectorAll('select')[0];
+const sortFilter = document.querySelectorAll('select')[1];
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    if (!authToken) {
+        window.location.href = 'auth.html';
+        return;
+    }
+
+    // Initialize Supabase
+    if (window.supabase && window.supabase.createClient) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    if (userGreeting && currentUser && currentUser.username) {
+        userGreeting.textContent = `Welcome back, ${currentUser.username}`;
+        const avatarLetter = document.getElementById('user-avatar-letter');
+        if (avatarLetter) {
+            avatarLetter.textContent = currentUser.username.charAt(0).toUpperCase();
+        }
+    }
+
+    loadItems();
+    setupEventListeners();
+    initializeFilters();
+});
+
+// Enhanced Event Listeners
+function setupEventListeners() {
+    // Modal handlers
+    if (createBtn) createBtn.addEventListener('click', showCreateModal);
+    if (closeCreateModal) closeCreateModal.addEventListener('click', hideCreateModal);
+    if (closeDetailModal) closeDetailModal.addEventListener('click', hideDetailModal);
+    if (closeModalBtn) closeModalBtn.addEventListener('click', hideDetailModal);
+    if (createItemForm) createItemForm.addEventListener('submit', handleCreateItem);
+
+    // User menu dropdown (click-based, not hover)
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+    if (userMenuBtn && userDropdown) {
+        userMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = !userDropdown.classList.contains('hidden');
+            userDropdown.classList.toggle('hidden');
+            userMenuBtn.setAttribute('aria-expanded', !isOpen);
+        });
+    }
+
+    // Close modals and dropdown on outside click
+    document.addEventListener('click', (e) => {
+        if (createModal && e.target === createModal) hideCreateModal();
+        if (detailModal && e.target === detailModal) hideDetailModal();
+        // Close user dropdown if clicking outside
+        if (userDropdown && !document.getElementById('user-menu-container').contains(e.target)) {
+            userDropdown.classList.add('hidden');
+            userMenuBtn.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Close modals on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            hideCreateModal();
+            hideDetailModal();
+        }
+    });
+
+    // Propose swap button
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'propose-swap-btn') {
+            if (currentDetailItem) {
+                showSwapModal(currentDetailItem.id);
+            }
+        }
+    });
+
+    // Confirm swap button
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'confirm-swap-btn' || e.target.closest('#confirm-swap-btn')) {
+            submitBidProposal();
+        }
+    });
+}
+
+function initializeFilters() {
+    // Search functionality
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(filterItems, 300));
+    }
+
+    // Category and sort filters
+    if (categoryFilter) categoryFilter.addEventListener('change', filterItems);
+    if (sortFilter) sortFilter.addEventListener('change', filterItems);
+
+    // Load more button
+    if (loadMoreContainer) {
+        loadMoreContainer.addEventListener('click', loadMoreItems);
+    }
+}
+
+// Enhanced Load Items from Supabase
+async function loadItems() {
+    if (!itemsGrid || !supabase) return;
+
+    try {
+        showLoadingState();
+
+        // Fetch items from Supabase
+        const { data: items, error } = await supabase
+            .from('items')
+            .select(`
+                *,
+                profiles (*)
+            `)
+            .eq('status', 'available')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        allItems = items || [];
+        currentPage = 1;
+
+        displayItems(allItems.slice(0, ITEMS_PER_PAGE));
+        updateItemsCount(allItems.length);
+
+        // Show/hide load more button
+        if (loadMoreContainer) {
+            loadMoreContainer.style.display = allItems.length > ITEMS_PER_PAGE ? 'block' : 'none';
+        }
+
+    } catch (error) {
+        showErrorState(error);
+    }
+}
+
+// Enhanced Display Items
+function displayItems(items) {
+    if (!itemsGrid) return;
+
+    if (!items || items.length === 0) {
+        itemsGrid.innerHTML = `
+            <div class="col-span-full text-center py-20">
+                <div class="text-white/40 text-6xl mb-4">📦</div>
+                <h3 class="text-white text-xl mb-2">No items found</h3>
+                <p class="text-white/60">Be the first to list an item!</p>
+            </div>
+        `;
+        return;
+    }
+
+    itemsGrid.innerHTML = '';
+
+    items.forEach((item, index) => {
+        const itemCard = createItemCard(item);
+        itemCard.style.animationDelay = `${index * 0.1}s`;
+        itemsGrid.appendChild(itemCard);
+    });
+}
+
+// Enhanced Create Item Card
+function createItemCard(item) {
+    const card = document.createElement('div');
+    card.className = 'item-card opacity-0';
+    card.addEventListener('click', () => showItemDetail(item));
+
+    const conditionMap = {
+        'new': { text: 'New', class: 'item-value-new' },
+        'like_new': { text: 'Like New', class: 'item-value-like_new' },
+        'good': { text: 'Good', class: 'item-value-good' },
+        'fair': { text: 'Fair', class: 'item-value-fair' },
+        'poor': { text: 'Poor', class: 'item-value-poor' }
+    };
+
+    const condition = conditionMap[item.condition] || { text: item.condition, class: 'bg-white/10 text-white' };
+    const ownerName = item.profiles ? `${item.profiles.first_name} ${item.profiles.last_name}` : 'Unknown';
+
+    card.innerHTML = `
+        <div class="item-image flex items-center justify-center">
+            ${item.imageurl ?
+                `<img src="${item.imageurl}" alt="${item.title}" class="w-full h-full object-cover">` :
+                `<div class="text-white/20"><i class="fas fa-image text-6xl"></i></div>`
+            }
+            <div class="absolute top-4 right-4 ${condition.class} px-3 py-1 rounded-xl text-xs font-bold uppercase">
+                ${condition.text}
+            </div>
+            <div class="absolute top-4 left-4 bg-black/70 px-3 py-1 rounded-xl text-xs text-white uppercase">
+                ${item.status}
+            </div>
+        </div>
+        <div class="p-6">
+            <h4 class="text-white font-semibold text-lg mb-3 line-clamp-2">${item.title}</h4>
+            <p class="text-white/70 text-sm mb-4 line-clamp-3 leading-relaxed">${item.description}</p>
+            <div class="flex justify-between items-center">
+                <span class="text-white/60 text-xs">By ${ownerName}</span>
+                <span class="text-white/40 text-xs">${formatDate(item.created_at)}</span>
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
+// Enhanced Item Detail Modal
+function showItemDetail(item) {
+    if (!detailModal) return;
+
+    currentDetailItem = item;
+
+    const conditionMap = {
+        'new': 'New', 'like_new': 'Like New', 'good': 'Good',
+        'fair': 'Fair', 'poor': 'Poor'
+    };
+
+    const ownerName = item.profiles ? `${item.profiles.first_name} ${item.profiles.last_name}` : 'Unknown';
+
+    document.getElementById('modal-title').textContent = item.title;
+    document.getElementById('modal-image').src = item.imageurl || '';
+    document.getElementById('modal-condition').textContent = conditionMap[item.condition] || item.condition;
+    document.getElementById('modal-status').textContent = item.status;
+    document.getElementById('modal-description').textContent = item.description;
+    document.getElementById('modal-owner').textContent = ownerName;
+    document.getElementById('modal-date').textContent = formatDate(item.created_at);
+
+    // Disable propose swap if item is owned by current user
+    const proposeBtn = document.getElementById('propose-swap-btn');
+    if (proposeBtn) {
+        if (item.ownerid === currentUser.id) {
+            proposeBtn.disabled = true;
+            proposeBtn.textContent = 'Your Item';
+        } else {
+            proposeBtn.disabled = false;
+            proposeBtn.innerHTML = '<i class="fas fa-exchange-alt mr-2"></i>PROPOSE SWAP';
+        }
+    }
+
+    detailModal.classList.remove('hidden');
+    detailModal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+async function showSwapModal(requestedItemId) {
+    const swapModal = document.getElementById('swap-modal');
+    const itemsList = document.getElementById('my-items-list');
+
+    // Set the target item name
+    if (currentDetailItem) {
+        document.getElementById('swap-target-item').textContent = currentDetailItem.title;
+    }
+
+    // Show loading state
+    itemsList.innerHTML = '<div class="text-white/60 p-4 text-center">Checking your inventory...</div>';
+    swapModal.classList.remove('hidden');
+    swapModal.classList.add('flex');
+
+    try {
+        if (!supabase) throw new Error('Supabase not initialized');
+
+        // Fetch current user's items
+        const { data: items, error } = await supabase
+            .from('items')
+            .select('*')
+            .eq('ownerid', currentUser.id)
+            .eq('status', 'available');
+
+        if (error) throw error;
+
+        const myItems = items || [];
+
+        if (myItems.length === 0) {
+            // Empty inventory state
+            itemsList.innerHTML = `
+                <div class="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 text-center">
+                    <p class="text-red-400 mb-4">You have no items uploaded yet!</p>
+                    <button onclick="hideSwapModal(); showCreateModal();"
+                            class="text-white bg-red-500/20 px-4 py-2 rounded-xl text-sm hover:bg-red-500/40 transition">
+                        Upload an Item Now
+                    </button>
+                </div>`;
+            document.getElementById('confirm-swap-btn').style.display = 'none';
+        } else {
+            // Populate the list
+            document.getElementById('confirm-swap-btn').style.display = 'block';
+            document.getElementById('confirm-swap-btn').disabled = true;
+            itemsList.innerHTML = myItems.map(item => `
+                <div class="swap-selection-card" onclick="selectItemToSwap('${item.id}', '${item.title}', '${item.condition}', '${item.imageurl || ''}', this)">
+                    <img src="${item.imageurl || ''}" class="w-12 h-12 rounded-lg object-cover mr-4" onerror="this.src='https://via.placeholder.com/50'">
+                    <div class="swap-card-info">
+                        <p class="swap-card-title">${item.title}</p>
+                        <p class="swap-card-condition">${item.condition}</p>
+                    </div>
+                    <div class="radio-indicator"></div>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error loading items:', error);
+        itemsList.innerHTML = `<p class="text-red-400 p-4">Error loading inventory: ${error.message}</p>`;
+    }
+}
+
+// Enhanced Create Item Modal
+function showCreateModal() {
+    if (!createModal) return;
+    createModal.classList.remove('hidden');
+    createModal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function hideCreateModal() {
+    if (!createModal) return;
+    createModal.classList.add('hidden');
+    createModal.classList.remove('flex');
+    document.body.style.overflow = 'auto';
+}
+
+function hideDetailModal() {
+    if (!detailModal) return;
+    detailModal.classList.add('hidden');
+    detailModal.classList.remove('flex');
+    document.body.style.overflow = 'auto';
+}
+
+// Enhanced Helper Functions
+function showLoadingState() {
+    if (itemsGrid) {
+        itemsGrid.innerHTML = `
+            <div class="col-span-full text-center py-20">
+                <div class="loading mx-auto mb-4"></div>
+                <p class="text-white/60">Loading amazing items...</p>
+            </div>
+        `;
+    }
+}
+
+function showErrorState(error) {
+    console.error('Error:', error);
+    if (itemsGrid) {
+        itemsGrid.innerHTML = `
+            <div class="col-span-full text-center py-20">
+                <div class="text-white/40 text-6xl mb-4">⚠️</div>
+                <h3 class="text-white text-xl mb-2">Something went wrong</h3>
+                <p class="text-white/60 mb-6">${error.message || 'Unable to load items'}</p>
+                <button onclick="loadItems()" class="bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white px-6 py-3 rounded-2xl font-semibold hover:opacity-90 transition">
+                    Try Again
+                </button>
+            </div>
+        `;
+    }
+}
+
+function updateItemsCount(count) {
+    if (itemsCount) {
+        itemsCount.textContent = count.toLocaleString();
+    }
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function filterItems() {
+    let filteredItems = [...allItems];
+
+    // Apply search filter
+    if (searchInput && searchInput.value) {
+        const searchTerm = searchInput.value.toLowerCase();
+        filteredItems = filteredItems.filter(item =>
+            item.title.toLowerCase().includes(searchTerm) ||
+            item.description.toLowerCase().includes(searchTerm) ||
+            item.condition.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    // Apply sort filter
+    if (sortFilter && sortFilter.value) {
+        switch(sortFilter.value) {
+            case 'Sort by: Newest':
+                filteredItems.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                break;
+            case 'Sort by: Condition':
+                const conditionOrder = ['new', 'like_new', 'good', 'fair', 'poor'];
+                filteredItems.sort((a, b) => conditionOrder.indexOf(a.condition) - conditionOrder.indexOf(b.condition));
+                break;
+        }
+    }
+
+    currentPage = 1;
+    displayItems(filteredItems.slice(0, ITEMS_PER_PAGE));
+    updateItemsCount(filteredItems.length);
+
+    // Show/hide load more button
+    if (loadMoreContainer) {
+        loadMoreContainer.style.display = filteredItems.length > ITEMS_PER_PAGE ? 'block' : 'none';
+    }
+}
+
+function loadMoreItems() {
+    const filteredItems = getFilteredItems();
+    const nextPageItems = filteredItems.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE);
+
+    if (nextPageItems.length > 0) {
+        nextPageItems.forEach(item => {
+            const itemCard = createItemCard(item);
+            itemsGrid.appendChild(itemCard);
+        });
+        currentPage++;
+    }
+
+    // Hide load more button if no more items
+    if ((currentPage + 1) * ITEMS_PER_PAGE >= filteredItems.length) {
+        loadMoreContainer.style.display = 'none';
+    }
+}
+
+function getFilteredItems() {
+    return allItems;
+}
+
+// Add the file name update function
+function updateFileName(input) {
+    const fileName = document.getElementById('file-name');
+    if (input.files.length > 0) {
+        fileName.textContent = input.files[0].name;
+        fileName.className = 'text-white/80 text-xs';
+    } else {
+        fileName.textContent = 'PNG, JPG up to 10MB';
+        fileName.className = 'text-white/40 text-xs';
+    }
+}
+
+// Function to upload image to Cloudinary
+async function uploadImage(file) {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+
+        const response = await fetch(CLOUDINARY_URL, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Image upload failed. Please check your Cloudinary settings.');
+        }
+
+        const data = await response.json();
+        return data.secure_url;
+
+    } catch (error) {
+        console.error('Cloudinary upload error:', error);
+        throw new Error('Failed to upload image. Please try again.');
+    }
+}
+
+// Show notification function
+function showNotification(message, type = 'info') {
+    const existingNotification = document.getElementById('notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+
+    const notification = document.createElement('div');
+    notification.id = 'notification';
+    notification.className = `fixed top-4 right-4 p-4 rounded-xl shadow-lg z-50 transform transition-transform duration-300 ${
+        type === 'success' ? 'bg-green-500' :
+        type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+    } text-white`;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Handler for submitting a new item listing
+async function handleCreateItem(e) {
+    e.preventDefault();
+
+    if (!currentUser || !currentUser.id) {
+        showNotification('Please log in to create items', 'error');
+        return;
+    }
+
+    if (!supabase) {
+        showNotification('Database connection error', 'error');
+        return;
+    }
+
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+
+    try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...';
+
+        let imageUrl = null;
+
+        const imageFile = document.getElementById('item-image').files[0];
+        if (imageFile) {
+            imageUrl = await uploadImage(imageFile);
+        }
+
+        const itemData = {
+            title: form.title.value,
+            description: form.description.value,
+            condition: form.condition.value,
+            status: form.status.value,
+            ownerid: currentUser.id,
+            imageurl: imageUrl
+        };
+
+        const { data, error } = await supabase
+            .from('items')
+            .insert([itemData])
+            .select(`
+                *,
+                profiles (*)
+            `);
+
+        if (error) throw error;
+
+        hideCreateModal();
+        form.reset();
+        document.getElementById('file-name').textContent = 'PNG, JPG up to 10MB';
+        loadItems();
+
+        showNotification('Item created successfully!', 'success');
+
+    } catch (error) {
+        console.error('Error creating item:', error);
+        showNotification(error.message || 'Failed to create item', 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+    }
+}
+
+function formatDate(dateString) {
+    if (!dateString) return '';
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+// Function to hide swap modal
+function hideSwapModal() {
+    const swapModal = document.getElementById('swap-modal');
+    if (swapModal) {
+        swapModal.classList.add('hidden');
+        swapModal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+    selectedItemForSwap = null;
+}
+
+// Function to select item for swap
+function selectItemToSwap(itemId, title, condition, imageUrl, element) {
+    // Remove selected class from all items
+    const allItems = document.querySelectorAll('.swap-selection-card');
+    allItems.forEach(item => item.classList.remove('selected'));
+
+    // Add selected class to clicked item
+    element.classList.add('selected');
+
+    // Store selected item
+    selectedItemForSwap = { id: itemId, title, condition, imageurl: imageUrl };
+
+    // Update the selected item preview
+    const selectedItemPreview = document.getElementById('selected-item-preview');
+    const selectedItemImage = document.getElementById('selected-item-image');
+    const selectedItemTitle = document.getElementById('selected-item-title');
+    const selectedItemCondition = document.getElementById('selected-item-condition');
+
+    selectedItemImage.src = imageUrl || 'https://via.placeholder.com/50';
+    selectedItemTitle.textContent = title;
+    selectedItemCondition.textContent = condition;
+    selectedItemPreview.classList.remove('hidden');
+
+    // Enable the confirm button
+    const confirmBtn = document.getElementById('confirm-swap-btn');
+    if (confirmBtn) {
+        confirmBtn.disabled = false;
+        confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+}
+
+// Submit bid proposal
+async function submitBidProposal() {
+    if (!selectedItemForSwap || !currentDetailItem) {
+        showNotification('Please select an item to bid', 'error');
+        return;
+    }
+
+    if (!supabase) {
+        showNotification('Database connection error', 'error');
+        return;
+    }
+
+    try {
+        const bidData = {
+            proposer_id: currentUser.id,
+            proposer_item_id: selectedItemForSwap.id,
+            target_item_id: currentDetailItem.id,
+            target_owner_id: currentDetailItem.ownerid,
+            status: 'pending',
+            created_at: new Date().toISOString()
+        };
+
+        const { data, error } = await supabase
+            .from('bids')
+            .insert([bidData])
+            .select();
+
+        if (error) throw error;
+
+        // Create notification for the item owner
+        const notificationData = {
+            user_id: currentDetailItem.ownerid,
+            type: 'bid_received',
+            title: `${currentUser.username} wants to swap their ${selectedItemForSwap.title} for your ${currentDetailItem.title}`,
+            bid_id: data[0].id,
+            read: false,
+            created_at: new Date().toISOString()
+        };
+
+        await supabase
+            .from('notifications')
+            .insert([notificationData]);
+
+        showNotification('Bid proposal sent!', 'success');
+        hideSwapModal();
+        hideDetailModal();
+
+    } catch (error) {
+        console.error('Error submitting bid:', error);
+        showNotification(error.message || 'Failed to submit bid', 'error');
+    }
+}
+
+// Logout handler
+function handleLogout() {
+    localStorage.removeItem('bora_token');
+    localStorage.removeItem('user_data');
+    window.location.href = 'index.html';
+}
+
+
+################################################################################
+FILE: .\js\feed.js
+################################################################################
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Personalized Greeting using the name from localStorage
+    const token = localStorage.getItem('bora_token');
+    if (!token) {
+        window.location.href = "/"; // Kick back to login if no token
+    }
+
+    // Decoding JWT manually for the greeting (simplified for now)
+    // In production, we'd use a library or get this from a /me endpoint
+    document.getElementById('user-greeting').innerText = "BORA TRADER"; 
+
+    // 2. Sample Data (Later this comes from /api/items)
+    const items = [
+        { id: 1, name: "Vintage Camera", desc: "A 1970s film camera. Working condition.", value: "Medium", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1000" },
+        { id: 2, name: "Jordan 1s", desc: "Slightly worn, size 10. Trading for tech.", value: "High", img: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&q=80&w=1000" }
+    ];
+
+    const feed = document.getElementById('feed-container');
+
+    // 3. Build the Feed
+    items.forEach(item => {
+        const section = document.createElement('section');
+        section.className = "snap-start h-screen w-full relative flex items-center justify-center p-4";
+        section.innerHTML = `
+            <img src="${item.img}" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <div class="relative z-10 text-center w-full max-w-sm mt-auto mb-20 px-6">
+                <h3 class="text-4xl font-black italic mb-2 tracking-tighter uppercase">${item.name}</h3>
+                <p class="text-sm opacity-80 mb-6">Tap to see details</p>
+                <button onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})" class="w-full py-4 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-bold uppercase tracking-widest">View Item</button>
+            </div>
+        `;
+        feed.appendChild(section);
+    });
+});
+
+function openModal(item) {
+    const modal = document.getElementById('detail-modal');
+    const content = document.getElementById('modal-content');
+    
+    document.getElementById('modal-title').innerText = item.name;
+    document.getElementById('modal-desc').innerText = item.desc;
+    document.getElementById('modal-value').innerText = `Value: ${item.value}`;
+    
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        content.classList.remove('translate-y-full');
+    }, 10);
+}
+
+document.getElementById('close-modal').onclick = () => {
+    const modal = document.getElementById('detail-modal');
+    const content = document.getElementById('modal-content');
+    content.classList.add('translate-y-full');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+};

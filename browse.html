@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Environment Variables -->
+    <meta name="supabase-url" content="<?php echo getenv('SUPABASE_URL'); ?>">
+    <meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+    <meta name="cloudinary-cloud-name" content="<?php echo getenv('CLOUDINARY_CLOUD_NAME'); ?>">
+    <meta name="cloudinary-upload-preset" content="<?php echo getenv('CLOUDINARY_UPLOAD_PRESET'); ?>">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/browse.css">
+</head>
+<body class="bg-gradient-to-br from-[#FFD700] to-[#8A2BE2] min-h-screen">
+
+    <!-- Enhanced Header -->
+    <header class="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-xl flex items-center justify-center shadow-lg">
+                        <span class="text-white font-bold text-xl">B</span>
+                    </div>
+                    <h1 class="text-white text-2xl font-bold tracking-tight">BARTER BORA</h1>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <span id="user-greeting" class="text-white/90 font-medium hidden md:block text-lg"></span>
+
+                    <div class="relative" id="user-menu-container">
+                        <button id="user-menu-btn" class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-transform hover:scale-105 focus:outline-none" aria-label="User menu" aria-expanded="false">
+                            <span class="text-white font-bold text-sm" id="user-avatar-letter">U</span>
+                        </button>
+                        <div id="user-dropdown" class="absolute hidden right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-2 z-50">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Profile</a>
+                            <a href="my-items.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">My Items</a>
+                            <a href="notifications.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Notifications</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Settings</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-red-600 hover:bg-red-50/50 transition">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Enhanced Hero Section -->
+    <section class="relative py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-white/10 backdrop-blur-md rounded-2xl px-8 py-4 mb-6 border border-white/20">
+                    <h2 class="text-5xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-white to-[#FFE44D] bg-clip-text text-transparent">
+                        Welcome to Barter Bora
+                    </h2>
+                </div>
+                <p class="text-white/90 text-xl max-w-3xl mx-auto leading-relaxed">
+                    Discover amazing items and trade what you don't need for what you truly want.
+                    No money involved—just smart swapping.
+                </p>
+            </div>
+
+            <!-- Enhanced Search and Filters -->
+            <div class="bg-white/15 backdrop-blur-xl rounded-3xl p-8 mb-16 border border-white/20 shadow-2xl">
+                <div class="flex flex-col lg:flex-row gap-6 items-center">
+                    <div class="flex-1 w-full">
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 text-lg"></i>
+                            <input type="text" placeholder="Search for items, categories, or users..."
+                                   class="w-full bg-white/10 border-2 border-white/20 rounded-2xl py-4 pl-12 pr-6 text-white placeholder-white/60 focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all duration-200 text-lg">
+                        </div>
+                    </div>
+                    <div class="flex gap-4 flex-wrap justify-center">
+                        <select class="bg-white/10 border-2 border-white/20 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all appearance-none">
+                            <option class="bg-[#2d3047]">All Categories</option>
+                            <option class="bg-[#2d3047]">Electronics</option>
+                            <option class="bg-[#2d3047]">Furniture</option>
+                            <option class="bg-[#2d3047]">Clothing</option>
+                            <option class="bg-[#2d3047]">Books</option>
+                            <option class="bg-[#2d3047]">Other</option>
+                        </select>
+                        <select class="bg-white/10 border-2 border-white/20 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all appearance-none">
+                            <option class="bg-[#2d3047]">Sort by: Newest</option>
+                            <option class="bg-[#2d3047]">Sort by: Condition</option>
+                            <option class="bg-[#2d3047]">Sort by: Popular</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Items Grid -->
+            <div class="mb-16">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-3xl font-bold text-white">Available Items</h3>
+                    <span class="bg-white/10 text-white/80 px-4 py-2 rounded-xl text-sm">
+                        <span id="items-count">0</span> items found
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="items-grid">
+                    <!-- Items will be loaded here from Supabase -->
+                </div>
+
+                <div class="text-center mt-12" id="load-more-container">
+                    <button class="bg-white/10 hover:bg-white/20 border-2 border-white/20 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-200 hover:scale-105">
+                        Load More Items
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Create Item Modal -->
+    <div id="create-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+        <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-2xl border-2 border-white/10 shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold text-white">Create New Listing</h3>
+                <button id="close-create-modal" class="text-white/60 hover:text-white transition p-2 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <form id="create-item-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-white/80 text-sm mb-3 block font-medium">Item Title*</label>
+                        <input type="text" name="title" required
+                               class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all">
+                    </div>
+
+                    <div>
+                        <label class="text-white/80 text-sm mb-3 block font-medium">Condition*</label>
+                        <select name="condition" required
+                                class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all appearance-none">
+                            <option value="">Select Condition</option>
+                            <option value="new">New</option>
+                            <option value="like_new">Like New</option>
+                            <option value="good">Good</option>
+                            <option value="fair">Fair</option>
+                            <option value="poor">Poor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-white/80 text-sm mb-3 block font-medium">Description*</label>
+                    <textarea name="description" required rows="4"
+                              class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-white/80 text-sm mb-3 block font-medium">Status</label>
+                        <select name="status"
+                                class="w-full bg-white/5 border-2 border-white/15 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-[#FFD700] focus:ring-2 focus:ring-[#FFD700]/30 transition-all appearance-none">
+                            <option value="available">Available</option>
+                            <option value="pending">Pending Trade</option>
+                            <option value="traded">Traded</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-white/80 text-sm mb-3 block font-medium">Upload Image</label>
+                        <div class="border-2 border-dashed border-white/20 rounded-2xl p-6 text-center cursor-pointer transition-all hover:border-[#FFD700] hover:bg-white/5"
+                             onclick="document.getElementById('item-image').click()">
+                            <i class="fas fa-cloud-upload-alt text-white/40 text-3xl mb-3"></i>
+                            <p class="text-white/60 text-sm mb-1">Click to upload or drag and drop</p>
+                            <p class="text-white/40 text-xs" id="file-name">PNG, JPG up to 10MB</p>
+                            <input type="file" class="hidden" id="item-image" accept="image/*" onchange="updateFileName(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-4 px-6 rounded-2xl font-bold hover:opacity-90 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                    <span class="flex items-center justify-center">
+                        <i class="fas fa-plus-circle mr-3"></i>
+                        LIST ITEM FOR TRADE
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Enhanced Item Detail Modal -->
+    <div id="detail-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+        <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-4xl border-2 border-white/10 shadow-2xl">
+            <div class="flex justify-between items-start mb-8">
+                <div>
+                    <h3 id="modal-title" class="text-3xl font-bold text-white mb-2"></h3>
+                    <div class="flex items-center space-x-4">
+                        <span id="modal-condition" class="bg-[#FFD700]/20 text-[#FFD700] px-4 py-2 rounded-xl text-sm font-bold"></span>
+                        <span id="modal-status" class="bg-white/10 text-white/80 px-4 py-2 rounded-xl text-sm"></span>
+                    </div>
+                </div>
+                <button id="close-detail-modal" class="text-white/60 hover:text-white transition p-2 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="rounded-2xl overflow-hidden">
+                    <img id="modal-image" src="" alt="" class="w-full h-72 object-cover rounded-2xl">
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-white/80 text-sm mb-2 font-medium">Description</h4>
+                        <p id="modal-description" class="text-white/90 leading-relaxed"></p>
+                    </div>
+
+                    <div class="bg-white/5 rounded-2xl p-6">
+                        <h4 class="text-white/80 text-sm mb-4 font-medium">Item Owner</h4>
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold">U</span>
+                            </div>
+                            <div>
+                                <p id="modal-owner" class="text-white font-semibold"></p>
+                                <p class="text-white/60 text-sm">Member since <span id="modal-date"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex space-x-4">
+                <button id="close-modal-btn"
+                        class="flex-1 bg-white/10 text-white py-4 px-6 rounded-2xl font-semibold hover:bg-white/20 transition-all duration-200">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Browse
+                </button>
+                <button id="propose-swap-btn" class="flex-1 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-4 px-6 rounded-2xl font-bold hover:opacity-90 transition-all duration-200 hover:scale-[1.02]">
+                    <i class="fas fa-exchange-alt mr-2"></i>PROPOSE SWAP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swap Modal -->
+    <div id="swap-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#1a1b25] rounded-3xl p-8 w-full max-w-xl border border-white/10">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">Propose a Swap</h3>
+                <button onclick="hideSwapModal()" class="text-white/60 hover:text-white transition p-2 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <p class="text-white/60 mb-4">Select an item from your collection to offer for <span id="swap-target-item" class="font-semibold text-white"></span>:</p>
+
+            <!-- User's items list -->
+            <div id="my-items-list" class="space-y-3 max-h-60 overflow-y-auto mb-6 p-2">
+                <div class="text-center py-8">
+                    <div class="loading mx-auto mb-4"></div>
+                    <p class="text-white/60">Loading your items...</p>
+                </div>
+            </div>
+
+            <div class="bg-white/5 rounded-2xl p-4 mb-6 hidden" id="selected-item-preview">
+                <p class="text-white/80 text-sm mb-2">You're offering:</p>
+                <div class="flex items-center space-x-3">
+                    <img id="selected-item-image" src="" alt="" class="w-12 h-12 rounded-lg object-cover">
+                    <div>
+                        <h4 id="selected-item-title" class="text-white font-semibold text-sm"></h4>
+                        <p id="selected-item-condition" class="text-white/60 text-xs"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Actions -->
+            <div class="flex space-x-4">
+                <button onclick="hideSwapModal()"
+                        class="flex-1 px-6 py-4 rounded-2xl bg-white/5 text-white font-semibold hover:bg-white/10 transition-all duration-200">
+                    Cancel
+                </button>
+                <button id="confirm-swap-btn" disabled
+                        class="flex-1 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white font-bold opacity-50 cursor-not-allowed transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                    <span class="flex items-center justify-center">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        SEND PROPOSAL
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="create-item-btn">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <!-- Supabase client MUST load before app scripts -->
+
+    <script src="js/browse.js"></script>
+
+</body>
+</html>

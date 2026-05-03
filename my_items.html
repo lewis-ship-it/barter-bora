@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="supabase-url"      content="<?php echo getenv('SUPABASE_URL'); ?>">
+    <meta name="supabase-anon-key" content="<?php echo getenv('SUPABASE_ANON_KEY'); ?>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barter Bora | My Items</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/browse.css">
+</head>
+<body class="bg-gradient-to-br from-[#FFD700] to-[#8A2BE2] min-h-screen">
+
+<header class="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="browse.html" class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-xl flex items-center justify-center shadow-lg">
+                <span class="text-white font-bold text-xl">B</span>
+            </div>
+            <h1 class="text-white text-2xl font-bold tracking-tight">BARTER BORA</h1>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="browse.html" class="text-white/90 font-medium hover:text-white transition">Browse</a>
+            <div class="relative group">
+                <div class="w-12 h-12 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center cursor-pointer shadow-lg group-hover:scale-105 transition-transform">
+                    <span class="text-white font-bold text-sm" id="avatar-letter">U</span>
+                </div>
+                <div class="absolute hidden group-hover:block right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-2 z-50">
+                    <a href="profile.html"       class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Profile</a>
+                    <a href="notifications.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100/50 transition">Notifications</a>
+                    <div class="border-t border-gray-200 my-1"></div>
+                    <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-red-600 hover:bg-red-50/50 transition">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="py-16">
+    <div class="container mx-auto px-6">
+        <div class="flex items-center justify-between mb-12">
+            <div>
+                <h2 class="text-4xl font-bold text-white mb-1">My Items</h2>
+                <p class="text-white/70">Manage your listings and review bids</p>
+            </div>
+            <a href="browse.html" class="bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white px-6 py-3 rounded-2xl font-semibold hover:opacity-90 transition flex items-center gap-2">
+                <i class="fas fa-plus"></i> Add New Item
+            </a>
+        </div>
+
+        <div id="items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full text-center py-20">
+                <div class="loading mx-auto mb-4"></div>
+                <p class="text-white/60">Loading your items…</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Item Detail + Bids Modal -->
+<div id="item-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+    <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-2xl border-2 border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]">
+        <div class="flex justify-between items-start mb-6">
+            <h3 id="modal-title" class="text-2xl font-bold text-white"></h3>
+            <button onclick="closeItemModal()" class="text-white/60 hover:text-white p-2 rounded-lg hover:bg-white/10 transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="space-y-5">
+            <img id="modal-image" src="" alt="" class="w-full h-64 rounded-2xl object-cover">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white/5 rounded-xl p-4">
+                    <p class="text-white/60 text-xs mb-1 uppercase tracking-wide">Condition</p>
+                    <p id="modal-condition" class="text-white font-semibold"></p>
+                </div>
+                <div class="bg-white/5 rounded-xl p-4">
+                    <p class="text-white/60 text-xs mb-1 uppercase tracking-wide">Status</p>
+                    <p id="modal-status" class="text-white font-semibold capitalize"></p>
+                </div>
+            </div>
+            <div class="bg-white/5 rounded-xl p-4">
+                <p class="text-white/60 text-xs mb-2 uppercase tracking-wide">Description</p>
+                <p id="modal-description" class="text-white leading-relaxed"></p>
+            </div>
+
+            <!-- Bids Section -->
+            <div class="bg-white/5 rounded-xl p-4">
+                <p class="text-white/60 text-xs mb-3 uppercase tracking-wide font-semibold">Incoming Bids</p>
+                <div id="bids-list" class="space-y-3"></div>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="closeItemModal()" class="flex-1 bg-white/10 text-white py-3 rounded-2xl font-semibold hover:bg-white/20 transition">Close</button>
+                <button id="delete-btn" onclick="deleteCurrentItem()" class="flex-1 bg-red-600 text-white py-3 rounded-2xl font-semibold hover:bg-red-700 transition">
+                    <i class="fas fa-trash mr-2"></i>Delete Item
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Reveal Modal -->
+<div id="contact-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden items-center justify-center z-50 p-4">
+    <div class="bg-gradient-to-br from-[#1a1b25] to-[#2d3047] rounded-3xl p-8 w-full max-w-md border-2 border-white/10 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-white">Trading Partner Contact</h3>
+            <button onclick="closeContactModal()" class="text-white/60 hover:text-white p-2 rounded-lg hover:bg-white/10 transition"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="bg-green-500/10 border border-green-500/30 rounded-2xl p-4 mb-6 flex items-center gap-3">
+            <i class="fas fa-check-circle text-green-400 text-xl"></i>
+            <p class="text-green-300 text-sm">Swap accepted! Connect with your trading partner.</p>
+        </div>
+        <div id="contact-details" class="space-y-4"></div>
+        <button onclick="closeContactModal()" class="mt-6 w-full bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white py-3 rounded-2xl font-semibold">Done</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const API_BASE    = '/api';
+const authToken   = localStorage.getItem('bora_token');
+const currentUser = JSON.parse(localStorage.getItem('user_data') || '{}');
+const SUPABASE_URL      = document.querySelector('meta[name="supabase-url"]')?.content || '';
+const SUPABASE_ANON_KEY = document.querySelector('meta[name="supabase-anon-key"]')?.content || '';
+let supabase;
+if (window.supabase?.createClient) supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentItemId = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!authToken) { window.location.href = 'auth.html'; return; }
+    if (currentUser.username) document.getElementById('avatar-letter').textContent = currentUser.username.charAt(0).toUpperCase();
+    loadMyItems();
+});
+
+async function loadMyItems() {
+    const container = document.getElementById('items-container');
+    try {
+        const { data: items, error } = await supabase
+            .from('items').select('*')
+            .eq('ownerid', currentUser.id)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        if (!items?.length) {
+            container.innerHTML = `<div class="col-span-full text-center py-20">
+                <div class="text-6xl mb-4">📭</div>
+                <h3 class="text-white text-xl mb-2">No items yet</h3>
+                <p class="text-white/60 mb-6">Start listing items to begin trading</p>
+                <a href="browse.html" class="inline-block bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] text-white px-6 py-3 rounded-2xl font-semibold">Create First Item</a>
+            </div>`;
+            return;
+        }
+
+        const cMap = { new:'item-value-new', like_new:'item-value-like_new', good:'item-value-good', fair:'item-value-fair', poor:'item-value-poor' };
+        const cText = { new:'New', like_new:'Like New', good:'Good', fair:'Fair', poor:'Poor' };
+
+        container.innerHTML = items.map(item => `
+            <div class="item-card cursor-pointer" onclick="showItemDetails('${item.id}')">
+                <div class="item-image flex items-center justify-center">
+                    ${item.imageurl ? `<img src="${item.imageurl}" alt="${escHtml(item.title)}" class="w-full h-full object-cover">` : `<div class="text-white/20"><i class="fas fa-image text-6xl"></i></div>`}
+                    <div class="absolute top-4 right-4 ${cMap[item.condition] || 'bg-white/10 text-white'} px-3 py-1 rounded-xl text-xs font-bold uppercase">
+                        ${cText[item.condition] || item.condition}
+                    </div>
+                    <div class="absolute top-4 left-4 bg-black/70 px-3 py-1 rounded-xl text-xs text-white uppercase">${item.status}</div>
+                </div>
+                <div class="p-6">
+                    <h4 class="text-white font-semibold text-lg mb-2 line-clamp-2">${escHtml(item.title)}</h4>
+                    <p class="text-white/70 text-sm mb-3 line-clamp-2">${escHtml(item.description)}</p>
+                    <p class="text-white/40 text-xs">${formatDate(item.created_at)}</p>
+                </div>
+            </div>`).join('');
+
+    } catch (err) {
+        container.innerHTML = `<div class="col-span-full text-center py-20"><p class="text-red-400">${escHtml(err.message)}</p></div>`;
+    }
+}
+
+async function showItemDetails(itemId) {
+    currentItemId = itemId;
+    const modal = document.getElementById('item-modal');
+
+    const { data: item } = await supabase.from('items').select('*').eq('id', itemId).maybeSingle();
+    if (!item) return;
+
+    document.getElementById('modal-title').textContent       = item.title;
+    document.getElementById('modal-image').src               = item.imageurl || 'https://via.placeholder.com/400';
+    document.getElementById('modal-condition').textContent   = { new:'New', like_new:'Like New', good:'Good', fair:'Fair', poor:'Poor' }[item.condition] || item.condition;
+    document.getElementById('modal-status').textContent      = item.status;
+    document.getElementById('modal-description').textContent = item.description;
+
+    // Load bids
+    const { data: bids } = await supabase
+        .from('bids')
+        .select('*, proposer:proposer_id(first_name, last_name, username), proposer_item:proposer_item_id(title, condition, imageurl)')
+        .eq('target_item_id', itemId)
+        .order('created_at', { ascending: false });
+
+    const bidsList = document.getElementById('bids-list');
+    if (bids?.length) {
+        bidsList.innerHTML = bids.map(bid => `
+            <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                <div class="flex items-center gap-3 mb-3">
+                    <img src="${bid.proposer_item?.imageurl || 'https://via.placeholder.com/50'}"
+                         class="w-12 h-12 rounded-lg object-cover" onerror="this.src='https://via.placeholder.com/50'" alt="">
+                    <div class="flex-1">
+                        <p class="text-white font-semibold text-sm">${escHtml(bid.proposer?.first_name + ' ' + bid.proposer?.last_name)}</p>
+                        <p class="text-white/60 text-xs">Offering: ${escHtml(bid.proposer_item?.title || '')}</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-xl text-xs font-bold capitalize ${
+                        bid.status === 'pending'  ? 'bg-yellow-500/20 text-yellow-400' :
+                        bid.status === 'accepted' ? 'bg-green-500/20 text-green-400'  :
+                        'bg-red-500/20 text-red-400'}">${bid.status}</span>
+                </div>
+                ${bid.status === 'pending' ? `
+                <div class="flex gap-2">
+                    <button onclick="acceptBid('${bid.id}')"
+                            class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-xl text-sm font-semibold transition">
+                        <i class="fas fa-check mr-1"></i> Accept
+                    </button>
+                    <button onclick="rejectBid('${bid.id}')"
+                            class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-xl text-sm font-semibold transition">
+                        <i class="fas fa-times mr-1"></i> Decline
+                    </button>
+                </div>` : ''}
+                ${bid.status === 'accepted' ? `
+                <button onclick="viewContact('${bid.id}')"
+                        class="w-full mt-1 bg-green-600/20 border border-green-500/30 hover:bg-green-600/40 text-green-300 py-2 px-3 rounded-xl text-sm font-semibold transition">
+                    <i class="fas fa-address-card mr-1"></i> View Contact Info
+                </button>` : ''}
+            </div>`).join('');
+    } else {
+        bidsList.innerHTML = '<p class="text-white/40 text-sm text-center py-2">No bids yet on this item</p>';
+    }
+
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+}
+
+async function acceptBid(bidId) {
+    await updateBidStatus(bidId, 'accepted');
+    viewContact(bidId);
+}
+async function rejectBid(bidId) { await updateBidStatus(bidId, 'rejected'); }
+
+async function updateBidStatus(bidId, status) {
+    const res  = await fetch(`${API_BASE}/bids.php`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ id: bidId, status, updater_id: currentUser.id })
+    });
+    const data = await res.json();
+    if (!res.ok) { alert('Error: ' + (data.error || 'Failed')); return; }
+    showItemDetails(currentItemId); // refresh
+}
+
+async function viewContact(bidId) {
+    const modal   = document.getElementById('contact-modal');
+    const details = document.getElementById('contact-details');
+    details.innerHTML = `<div class="text-center py-6"><div class="loading mx-auto mb-2"></div></div>`;
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+
+    const res  = await fetch(`${API_BASE}/contact.php?bid_id=${encodeURIComponent(bidId)}&requester_id=${encodeURIComponent(currentUser.id)}`,
+        { headers: { 'Authorization': `Bearer ${authToken}` } });
+    const data = await res.json();
+
+    if (!res.ok) { details.innerHTML = `<p class="text-red-400 text-center">${escHtml(data.error)}</p>`; return; }
+
+    details.innerHTML = `
+        <div class="bg-white/5 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center gap-3 pb-3 border-b border-white/10">
+                <div class="w-14 h-14 bg-gradient-to-r from-[#FFD700] to-[#8A2BE2] rounded-full flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">${(data.first_name || '?').charAt(0).toUpperCase()}</span>
+                </div>
+                <div>
+                    <p class="text-white font-bold text-lg">${escHtml(data.first_name + ' ' + data.last_name)}</p>
+                    <p class="text-white/60 text-sm">@${escHtml(data.username)}</p>
+                </div>
+            </div>
+            ${data.email ? `<div class="flex items-center gap-3">
+                <i class="fas fa-envelope text-[#FFD700] w-5"></i>
+                <a href="mailto:${escAttr(data.email)}" class="text-white hover:text-[#FFD700] transition">${escHtml(data.email)}</a>
+            </div>` : ''}
+            ${data.phone_number ? `<div class="flex items-center gap-3">
+                <i class="fas fa-phone text-[#FFD700] w-5"></i>
+                <a href="tel:${escAttr(data.phone_number)}" class="text-white hover:text-[#FFD700] transition">${escHtml(data.phone_number)}</a>
+            </div>` : ''}
+            ${data.location ? `<div class="flex items-center gap-3">
+                <i class="fas fa-map-marker-alt text-[#FFD700] w-5"></i>
+                <p class="text-white">${escHtml(data.location)}</p>
+            </div>` : ''}
+        </div>`;
+}
+
+async function deleteCurrentItem() {
+    if (!currentItemId || !confirm('Delete this item? This cannot be undone.')) return;
+    const { error } = await supabase.from('items').delete().eq('id', currentItemId);
+    if (error) { alert('Error: ' + error.message); return; }
+    closeItemModal();
+    loadMyItems();
+}
+
+function closeItemModal() {
+    document.getElementById('item-modal').classList.add('hidden');
+    document.getElementById('item-modal').classList.remove('flex');
+    currentItemId = null;
+}
+function closeContactModal() {
+    document.getElementById('contact-modal').classList.add('hidden');
+    document.getElementById('contact-modal').classList.remove('flex');
+}
+function formatDate(s) {
+    if (!s) return '';
+    return new Date(s).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+}
+function escHtml(str) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(String(str || '')));
+    return d.innerHTML;
+}
+function escAttr(str) { return String(str || '').replace(/'/g,"&#39;").replace(/"/g,"&quot;"); }
+function handleLogout() {
+    localStorage.removeItem('bora_token');
+    localStorage.removeItem('user_data');
+    window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>
